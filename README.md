@@ -1,10 +1,12 @@
 ## 使用方法
-自己先安装Curl和JQ
+~1.Star本项目~
+1.安装Curl和JQ
+2.执行命令
 - 检测命令 `bash <(curl -sSL "https://github.com/CoiaPrant/MediaUnlock_Test/raw/main/check.sh")`
 
 ## 特性
 - 支持双栈测试
-- 支持大部分视频软件测试
+- 支持大部分流媒体测试
 - 部分测试支持输出解锁的国家
 
 ## BUG反馈
