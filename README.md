@@ -1,7 +1,9 @@
 ## 使用方法
-~1.Star本项目~
-1.安装Curl和JQ
-2.执行命令
+~首先 Star本项目~
+
+然后 安装Curl和JQ
+
+最后执行命令
 - 检测命令 `bash <(curl -sSL "https://github.com/CoiaPrant/MediaUnlock_Test/raw/main/check.sh")`
 
 ## 特性
@@ -16,6 +18,7 @@
 
 ## 赞助
 ~~我觉得没必要了吧~~
+
 如果你想的话我也不介意
 ![zfb.jpg](https://www.zeroteam.top/images/zfb.jpg)
 ![wx.png](https://www.zeroteam.top/images/wx.png)
