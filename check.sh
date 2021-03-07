@@ -234,16 +234,16 @@ function MediaUnlockTest_Netflix() {
         return;
     fi
     
-    local region=`tr [:lower:] [:upper:] <<< $(curl -${1} --user-agent "${UA_Browser}" -is "https://www.netflix.com/title/80018499" 2>&1 | grep -i "location" | awk '{print $2}' | cut -d '/' -f4 | cut -d '-' -f1)` ;
+    local region=`tr [:lower:] [:upper:] <<< $(curl -${1} --user-agent "${UA_Browser}" -fs --write-out %{redirect_url} --output /dev/null "https://www.netflix.com/title/80018499" | cut -d '/' -f4 | cut -d '-' -f1)` ;
     
-    if [[ "$region" == *"INDEX"* ]];then
+    if [[ ! -n "$region" ]];then
         region="US";
     fi
     echo -n -e "\r Netflix:\t\t\t\t${Font_Green}Yes(Region: ${region})${Font_Suffix}\n"
     return;
 }
 
-function MediaUnlockTest_Youtube_Region() {
+function MediaUnlockTest_YouTube_Region() {
     echo -n -e " YouTube Region:\t\t\t->\c";
     local result=`curl --user-agent "${UA_Browser}" -${1} -sSL "https://www.youtube.com/" 2>&1`;
     
@@ -295,7 +295,7 @@ function MediaUnlockTest() {
     MediaUnlockTest_BilibiliHKMCTW ${1};
     MediaUnlockTest_BilibiliTW ${1};
     MediaUnlockTest_Netflix ${1};
-    MediaUnlockTest_Youtube_Region ${1};
+    MediaUnlockTest_YouTube_Region ${1};
     MediaUnlockTest_DisneyPlus ${1};
 }
 
