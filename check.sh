@@ -15,12 +15,28 @@ Font_Suffix="\033[0m";
 export LANG="en_US";
 export LANGUAGE="en_US";
 export LC_ALL="en_US";
+function Head(){
 clear;
 echo -e "${Font_Red}反馈 https://t.me/zerocloud${Font_Suffix}";
 echo -e "${Font_Red}声明 本测试工具根据GPL V3协议开源，严禁倒卖${Font_Suffix}";
 echo -e "${Font_Red}提示 本工具测试结果仅供参考，请以实际使用为准${Font_Suffix}";
 echo -e " ** Version: v${shell_version}";
-
+}
+function InstallJQ() {
+	#安装JQ
+	if [[ $(cat /etc/os-release | grep '^ID=') =~ centos ]];then
+	yum install epel-release;
+	yum install jq -y;
+	Head;
+	elif [[ $(cat /etc/os-release | grep '^ID=') =~ ubuntu ]] || [[ $(cat /etc/os-release | grep '^ID=') =~ debian ]];then
+	#echo -e'\ndeb 07001 vivid main universe' >>/etc/apt/sources.list;
+	#sudo apt-get update -y;
+	apt-get install jq;
+	Head;
+	else echo -e"${Font_Red}请手动安装jq";
+	exit;
+	fi
+}
 function PharseJSON() {
     # 使用方法: PharseJSON "要解析的原JSON文本" "要解析的键值"
     # Example: PharseJSON ""Value":"123456"" "Value" [返回结果: 123456]
@@ -286,6 +302,7 @@ function MediaUnlockTest_DisneyPlus() {
 }
 
 function MediaUnlockTest() {
+	Head;
     MediaUnlockTest_HBONow ${1};
     MediaUnlockTest_BahamutAnime ${1};
     MediaUnlockTest_AbemaTV_IPTest ${1};
@@ -307,8 +324,8 @@ fi
 
 jq -V > /dev/null 2>&1;
 if [ $? -ne 0 ];then
-    echo -e "${Font_Red}Please install jq${Font_Suffix}";
-    exit;
+    #echo -e "${Font_Red}Please install jq${Font_Suffix}";
+	InstallJQ;
 fi
 echo " ** 正在测试IPv4解锁情况";
 check4=`ping 1.1.1.1 -c 1 2>&1`;
