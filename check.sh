@@ -33,7 +33,7 @@ function InstallJQ() {
 	#sudo apt-get update -y;
 	apt-get install jq;
 	Head;
-	else echo -e"${Font_Red}请手动安装jq";
+	else echo -e"${Font_Red}请手动安装jq${Font_Suffix}";
 	exit;
 	fi
 }
