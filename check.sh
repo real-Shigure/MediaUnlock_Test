@@ -15,24 +15,21 @@ Font_Suffix="\033[0m";
 export LANG="en_US";
 export LANGUAGE="en_US";
 export LC_ALL="en_US";
-function Head(){
+
 clear;
 echo -e "${Font_Red}反馈 https://t.me/zerocloud${Font_Suffix}";
 echo -e "${Font_Red}声明 本测试工具根据GPL V3协议开源，严禁倒卖${Font_Suffix}";
 echo -e "${Font_Red}提示 本工具测试结果仅供参考，请以实际使用为准${Font_Suffix}";
 echo -e " ** Version: v${shell_version}";
-}
+
 function InstallJQ() {
 	#安装JQ
 	if [ -e "/etc/redhat-release" ];then
 	yum install epel-release;
 	yum install jq -y;
-	Head;
 	elif [[ $(cat /etc/os-release | grep '^ID=') =~ ubuntu ]] || [[ $(cat /etc/os-release | grep '^ID=') =~ debian ]];then
-	#echo -e'\ndeb 07001 vivid main universe' >>/etc/apt/sources.list;
 	apt-get update -y;
 	apt-get install jq;
-	Head;
 	else 
 	echo -e "${Font_Red}请手动安装jq${Font_Suffix}";
 	exit;
