@@ -24,16 +24,17 @@ echo -e " ** Version: v${shell_version}";
 }
 function InstallJQ() {
 	#安装JQ
-	if [[ $(cat /etc/os-release | grep '^ID=') =~ centos ]];then
+	if [ -e "/etc/redhat-release" ];then
 	yum install epel-release;
 	yum install jq -y;
 	Head;
 	elif [[ $(cat /etc/os-release | grep '^ID=') =~ ubuntu ]] || [[ $(cat /etc/os-release | grep '^ID=') =~ debian ]];then
 	#echo -e'\ndeb 07001 vivid main universe' >>/etc/apt/sources.list;
-	#sudo apt-get update -y;
+	apt-get update -y;
 	apt-get install jq;
 	Head;
-	else echo -e"${Font_Red}请手动安装jq${Font_Suffix}";
+	else 
+	echo -e "${Font_Red}请手动安装jq${Font_Suffix}";
 	exit;
 	fi
 }
