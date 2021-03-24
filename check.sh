@@ -25,11 +25,11 @@ echo -e " ** Version: v${shell_version}";
 function InstallJQ() {
 	#安装JQ
 	if [ -e "/etc/redhat-release" ];then
-	yum install epel-release;
-	yum install jq -y;
+	$(yum install epel-release -y -q);
+	$(yum install jq -y -q);
 	elif [[ $(cat /etc/os-release | grep '^ID=') =~ ubuntu ]] || [[ $(cat /etc/os-release | grep '^ID=') =~ debian ]];then
-	apt-get update -y;
-	apt-get install jq;
+	$(apt-get update -y);
+	$(apt-get install jq);
 	else 
 	echo -e "${Font_Red}请手动安装jq${Font_Suffix}";
 	exit;
@@ -322,8 +322,7 @@ fi
 
 jq -V > /dev/null 2>&1;
 if [ $? -ne 0 ];then
-    #echo -e "${Font_Red}Please install jq${Font_Suffix}";
-	InstallJQ;
+   InstallJQ;
 fi
 echo " ** 正在测试IPv4解锁情况";
 check4=`ping 1.1.1.1 -c 1 2>&1`;
