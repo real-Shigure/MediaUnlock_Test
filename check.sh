@@ -300,7 +300,6 @@ function MediaUnlockTest_DisneyPlus() {
 }
 
 function MediaUnlockTest() {
-	Head;
     MediaUnlockTest_HBONow ${1};
     MediaUnlockTest_BahamutAnime ${1};
     MediaUnlockTest_AbemaTV_IPTest ${1};
