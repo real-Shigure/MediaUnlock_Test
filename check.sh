@@ -18,7 +18,7 @@ export LC_ALL="en_US";
 
 clear;
 echo -e "${Font_Red}项目地址 https://github.com/CoiaPrant/MediaUnlock_Test ${Font_Suffix}";
-echo -e "${Font_Red}反馈 https://t.me/zerocloud${Font_Suffix}";
+echo -e "${Font_Red}反馈 https://t.me/CoiaPrant${Font_Suffix}";
 echo -e "${Font_Red}声明 本测试工具根据GPL V3协议开源，严禁倒卖${Font_Suffix}";
 echo -e "${Font_Red}提示 本工具测试结果仅供参考，请以实际使用为准${Font_Suffix}";
 echo -e " ** Version: v${shell_version}";
