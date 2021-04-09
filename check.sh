@@ -26,11 +26,11 @@ echo -e " ** Version: v${shell_version}";
 function InstallJQ() {
 	#安装JQ
 	if [ -e "/etc/redhat-release" ];then
-	$(yum install epel-release -y -q);
-	$(yum install jq -y -q);
+	yum install epel-release -y -q > /dev/null;
+	yum install jq -y -q > /dev/null;
 	elif [[ $(cat /etc/os-release | grep '^ID=') =~ ubuntu ]] || [[ $(cat /etc/os-release | grep '^ID=') =~ debian ]];then
-	$(apt-get update -y);
-	$(apt-get install jq);
+	apt-get update -y > /dev/null;
+	apt-get install jq > /dev/null;
 	else 
 	echo -e "${Font_Red}请手动安装jq${Font_Suffix}";
 	exit;
