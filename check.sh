@@ -35,6 +35,12 @@ function InstallJQ() {
 	echo -e "${Font_Red}请手动安装jq${Font_Suffix}";
 	exit;
 	fi
+
+        jq -V > /dev/null 2>&1;
+        if [ $? -ne 0 ];then
+	echo -e "${Font_Red}请手动安装jq${Font_Suffix}";
+	exit;
+        fi
 }
 function PharseJSON() {
     # 使用方法: PharseJSON "要解析的原JSON文本" "要解析的键值"
