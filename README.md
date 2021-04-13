@@ -10,7 +10,6 @@
 
 最后执行命令
 - 检测命令 `bash <(curl -sSL "https://github.com/CoiaPrant/MediaUnlock_Test/raw/main/check.sh")`
-- 保存日志的命令 `bash <(curl -sSL "https://github.com/CoiaPrant/MediaUnlock_Test/raw/main/check.sh") | tee check.log`
 ## 特性
 - 支持双栈测试
 - 支持大部分流媒体测试
