@@ -124,7 +124,7 @@ function MediaUnlockTest_BilibiliChinaMainland() {
 
 # 流媒体解锁测试-哔哩哔哩港澳台限定
 function MediaUnlockTest_BilibiliHKMCTW() {
-    echo -n -e " BiliBili Hong Kong, Macao and Taiwan regions of PRC:\t->\c";
+    echo -n -e " BiliBili HK&MC&TW regions of PRC:\t->\c";
     local randsession="$(cat /dev/urandom | head -n 32 | md5sum | head -c 32)";
     # 尝试获取成功的结果
     local result=`curl --user-agent "${UA_Browser}" -${1} -fsSL --max-time 30 "https://api.bilibili.com/pgc/player/web/playurl?avid=18281381&cid=29892777&qn=0&type=&otype=json&ep_id=183799&fourk=1&fnver=0&fnval=16&session=${randsession}&module=bangumi" 2>&1`;
@@ -132,17 +132,17 @@ function MediaUnlockTest_BilibiliHKMCTW() {
         local result="$(PharseJSON "${result}" "code")";
         if [ "$?" = "0" ]; then
             if [ "${result}" = "0" ]; then
-                echo -n -e "\r BiliBili Hong Kong, Macao and Taiwan regions of PRC:\t${Font_Green}Yes${Font_Suffix}\n" && echo "BiliBili Hong Kong, Macao and Taiwan regions of PRC:YES">>check.log;
+                echo -n -e "\r BiliBili HK&MC&TW regions of PRC:\t${Font_Green}Yes${Font_Suffix}\n" && echo "BiliBili HK&MC&TW regions of PRC:YES">>check.log;
                 elif [ "${result}" = "-10403" ]; then
-                echo -n -e "\r BiliBili Hong Kong, Macao and Taiwan regions of PRC:\t${Font_Red}No${Font_Suffix}\n" && echo "BiliBili Hong Kong, Macao and Taiwan regions of PRC:NO">>check.log;
+                echo -n -e "\r BiliBili HK&MC&TW regions of PRC:\t${Font_Red}No${Font_Suffix}\n" && echo "BiliBili HK&MC&TW regions of PRC:NO">>check.log;
             else
-                echo -n -e "\r BiliBili Hong Kong, Macao and Taiwan regions of PRC:\t${Font_Red}Failed${Font_Suffix} ${Font_SkyBlue}(${result})${Font_Suffix}\n" && echo "BiliBili Hong Kong, Macao and Taiwan regions of PRC:Failed (${result})">>check.log;
+                echo -n -e "\r BiliBili HK&MC&TW regions of PRC:\t${Font_Red}Failed${Font_Suffix} ${Font_SkyBlue}(${result})${Font_Suffix}\n" && echo "BiliBili HK&MC&TW regions of PRC:Failed (${result})">>check.log;
             fi
         else
-            echo -n -e "\r BiliBili Hong Kong, Macao and Taiwan regions of PRC:\t${Font_Red}Failed (Parse Json)${Font_Suffix}\n" && echo "BiliBili Hong Kong, Macao and Taiwan regions of PRC:Failed (Parse Json)">>check.log;
+            echo -n -e "\r BiliBili HK&MC&TW regions of PRC:\t${Font_Red}Failed (Parse Json)${Font_Suffix}\n" && echo "BiliBili HK&MC&TW regions of PRC:Failed (Parse Json)">>check.log;
         fi
     else
-        echo -n -e "\r BiliBili Hong Kong, Macao and Taiwan regions of PRC:\t${Font_Red}Failed (Network Connection)${Font_Suffix}\n" && echo "BiliBili Hong Kong, Macao and Taiwan regions of PRC:Failed (Network Connection)">>check.log;
+        echo -n -e "\r BiliBili HK&MC&TW regions of PRC:\t${Font_Red}Failed (Network Connection)${Font_Suffix}\n" && echo "BiliBili HK&MC&TW regions of PRC:Failed (Network Connection)">>check.log;
     fi
 }
 
