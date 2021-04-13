@@ -21,7 +21,7 @@ echo -e "${Font_Red}项目地址 https://github.com/CoiaPrant/MediaUnlock_Test $
 echo -e "${Font_Red}反馈 https://t.me/CoiaPrant${Font_Suffix}";
 echo -e "${Font_Red}声明 本测试工具根据GPL V3协议开源，严禁倒卖${Font_Suffix}";
 echo -e "${Font_Red}提示 本工具测试结果仅供参考，请以实际使用为准${Font_Suffix}";
-echo -e " ** Version: v${shell_version}";
+echo -e " ** Version: v${shell_version}" && echo $(date +%F%n%T)>check.log;
 
 function InstallJQ() {
 	#安装JQ
@@ -156,17 +156,17 @@ function MediaUnlockTest_BilibiliTW() {
         local result="$(PharseJSON "${result}" "code")";
         if [ "$?" = "0" ]; then
             if [ "${result}" = "0" ]; then
-                echo -n -e "\r BiliBili Taiwan of PRC Only:\t\t\t${Font_Green}Yes${Font_Suffix}\n" && echo "BiliBili Taiwan of PRC Only:YES">>check.log;
+                echo -n -e "\r BiliBili Taiwan of PRC Only:\t\t${Font_Green}Yes${Font_Suffix}\n" && echo "BiliBili Taiwan of PRC Only:YES">>check.log;
                 elif [ "${result}" = "-10403" ]; then
-                echo -n -e "\r BiliBili Taiwan of PRC Only:\t\t\t${Font_Red}No${Font_Suffix}\n" && echo "BiliBili Taiwan of PRC Only:NO">>check.log;
+                echo -n -e "\r BiliBili Taiwan of PRC Only:\t\t${Font_Red}No${Font_Suffix}\n" && echo "BiliBili Taiwan of PRC Only:NO">>check.log;
             else
-                echo -n -e "\r BiliBili Taiwan of PRC Only:\t\t\t${Font_Red}Failed${Font_Suffix} ${Font_SkyBlue}(${result})${Font_Suffix}\n" && echo "BiliBili Taiwan of PRC Only:Failed (${result})">>check.log;
+                echo -n -e "\r BiliBili Taiwan of PRC Only:\t\t${Font_Red}Failed${Font_Suffix} ${Font_SkyBlue}(${result})${Font_Suffix}\n" && echo "BiliBili Taiwan of PRC Only:Failed (${result})">>check.log;
             fi
         else
-            echo -n -e "\r BiliBili Taiwan of PRC Only:\t\t\t${Font_Red}Failed (Parse Json)${Font_Suffix}\n" && echo "BiliBili Taiwan of PRC Only:Failed (Parse Json)">>check.log;
+            echo -n -e "\r BiliBili Taiwan of PRC Only:\t\t${Font_Red}Failed (Parse Json)${Font_Suffix}\n" && echo "BiliBili Taiwan of PRC Only:Failed (Parse Json)">>check.log;
         fi
     else
-        echo -n -e "\r BiliBili Taiwan of PRC Only:\t\t\t${Font_Red}Failed (Network Connection)${Font_Suffix}\n" && echo "BiliBili Taiwan of PRC Only:Failed (Network Connection)">>check.log;
+        echo -n -e "\r BiliBili Taiwan of PRC Only:\t\t${Font_Red}Failed (Network Connection)${Font_Suffix}\n" && echo "BiliBili Taiwan of PRC Only:Failed (Network Connection)">>check.log;
     fi
 }
 
