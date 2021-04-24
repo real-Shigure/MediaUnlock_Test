@@ -16,7 +16,7 @@ LOG_FILE="check.log";
 clear;
 echo -e "流媒体解锁测试 MediaUnlock_Test" && echo -e "流媒体解锁测试 MediaUnlock_Test" > ${LOG_FILE};
 echo -e "${Font_Purple}项目地址 https://github.com/CoiaPrant/MediaUnlock_Test ${Font_Suffix}" && echo -e "项目地址 https://github.com/CoiaPrant/MediaUnlock_Test" >> ${LOG_FILE};
-echo -e "${Font_Purple}反馈 https://t.me/CoiaPrant${Font_Suffix}" && echo -e"反馈 https://t.me/CoiaPrant" >> ${LOG_FILE};
+echo -e "${Font_Purple}反馈 https://t.me/CoiaPrant${Font_Suffix}" && echo -e "反馈 https://t.me/CoiaPrant" >> ${LOG_FILE};
 echo -e "${Font_Purple}声明 本测试工具根据GPL V3协议开源，严禁倒卖${Font_Suffix}" && echo -e "声明 本测试工具根据GPL V3协议开源，严禁倒卖" >> ${LOG_FILE};
 echo -e "${Font_Purple}提示 本工具测试结果仅供参考，请以实际使用为准${Font_Suffix}" && echo -e "提示 本工具测试结果仅供参考，请以实际使用为准" >> ${LOG_FILE};
 echo -e "${Font_Purple}国家代码：http://www.loglogo.com/front/countryCode/${Font_Suffix}" && echo -e "国家代码：http://www.loglogo.com/front/countryCode/" >> ${LOG_FILE};
@@ -30,18 +30,16 @@ export LC_ALL="en_US";
 function InstallJQ() {
     #安装JQ
     if [ -e "/etc/redhat-release" ];then
+        echo -e "${Font_Green}正在安装依赖: epel-release${Font_Suffix}";
         yum install epel-release -y -q > /dev/null;
+        echo -e "${Font_Green}正在安装依赖: jq${Font_Suffix}";
         yum install jq -y -q > /dev/null;
         elif [[ $(cat /etc/os-release | grep '^ID=') =~ ubuntu ]] || [[ $(cat /etc/os-release | grep '^ID=') =~ debian ]];then
+        echo -e "${Font_Green}正在更新软件包列表...${Font_Suffix}";
         apt-get update -y > /dev/null;
+        echo -e "${Font_Green}正在安装依赖: jq${Font_Suffix}";
         apt-get install jq > /dev/null;
     else
-        echo -e "${Font_Red}请手动安装jq${Font_Suffix}";
-        exit;
-    fi
-    
-    jq -V > /dev/null 2>&1;
-    if [ $? -ne 0 ];then
         echo -e "${Font_Red}请手动安装jq${Font_Suffix}";
         exit;
     fi
