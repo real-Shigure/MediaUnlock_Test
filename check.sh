@@ -59,7 +59,7 @@ function PasteBin_Upload() {
         --data-urlencode "content@${PASTEBIN_CONTENT:-/dev/stdin}" \
         --data "poster=${PASTEBIN_POSTER:-MediaUnlock_Test_By_CoiaPrant}" \
         --data "expiration=${PASTEBIN_EXPIRATION:-}" \
-        --data "syntax=${PASTEBIN_SYNTAX:-text}")"
+    --data "syntax=${PASTEBIN_SYNTAX:-text}")"
     if [ "$?" = "0" ]; then
         echo -e "${Font_Green}报告链接: ${uploadresult} ${Font_Suffix}";
     else
@@ -69,11 +69,17 @@ function PasteBin_Upload() {
 
 function GameTest_Steam(){
     echo -n -e " Steam Currency:\t\t\t->\c";
-    local result=`curl --user-agent "${UA_Browser}" -${1} -fsSL --max-time 30 https://store.steampowered.com/app/761830 | grep priceCurrency | cut -d '"' -f4`;
-    if [ ! -n "$result" ]; then
+    local result=`curl --user-agent "${UA_Browser}" -${1} -fsSL --max-time 30 https://store.steampowered.com/app/761830`;
+    
+    if [ "$result" == "curl*"]; then
         echo -n -e "\r Steam Currency:\t\t\t${Font_Red}Failed (Network Connection)${Font_Suffix}\n" && echo -e " Steam Currency:\t\t\tFailed (Network Connection)" >> ${LOG_FILE};
     else
-        echo -e "\r Steam Currency:\t\t\t${Font_Green}${result}${Font_Suffix}\n" && echo -e " Steam Currency:\t\t\t${result}" >> ${LOG_FILE};
+        local result=`echo ${result} | grep priceCurrency | cut -d '"' -f4`;
+        if [ ! -n "$result" ]; then
+            echo -n -e "\r Steam Currency:\t\t\t${Font_Red}No${Font_Suffix}\n" && echo -e " Steam Currency:\t\t\tNo" >> ${LOG_FILE};
+        else
+            echo -e "\r Steam Currency:\t\t\t${Font_Green}${result}${Font_Suffix}\n" && echo -e " Steam Currency:\t\t\t${result}" >> ${LOG_FILE};
+        fi
     fi
 }
 
