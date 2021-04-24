@@ -21,31 +21,42 @@ echo -e "${Font_Red}项目地址 https://github.com/CoiaPrant/MediaUnlock_Test $
 echo -e "${Font_Red}反馈 https://t.me/CoiaPrant${Font_Suffix}";
 echo -e "${Font_Red}声明 本测试工具根据GPL V3协议开源，严禁倒卖${Font_Suffix}";
 echo -e "${Font_Red}提示 本工具测试结果仅供参考，请以实际使用为准${Font_Suffix}";
+echo -e "${Font_Red}国家代码：http://www.loglogo.com/front/countryCode/ ${Font_Suffix}"
 echo -e " ** Version: v${shell_version}" && echo $(date +%F%n%T)>check.log;
 
 function InstallJQ() {
-	#安装JQ
-	if [ -e "/etc/redhat-release" ];then
-	yum install epel-release -y -q > /dev/null;
-	yum install jq -y -q > /dev/null;
-	elif [[ $(cat /etc/os-release | grep '^ID=') =~ ubuntu ]] || [[ $(cat /etc/os-release | grep '^ID=') =~ debian ]];then
-	apt-get update -y > /dev/null;
-	apt-get install jq > /dev/null;
-	else 
-	echo -e "${Font_Red}请手动安装jq${Font_Suffix}";
-	exit;
-	fi
-
-        jq -V > /dev/null 2>&1;
-        if [ $? -ne 0 ];then
-	echo -e "${Font_Red}请手动安装jq${Font_Suffix}";
-	exit;
-        fi
+    #安装JQ
+    if [ -e "/etc/redhat-release" ];then
+        yum install epel-release -y -q > /dev/null;
+        yum install jq -y -q > /dev/null;
+        elif [[ $(cat /etc/os-release | grep '^ID=') =~ ubuntu ]] || [[ $(cat /etc/os-release | grep '^ID=') =~ debian ]];then
+        apt-get update -y > /dev/null;
+        apt-get install jq > /dev/null;
+    else
+        echo -e "${Font_Red}请手动安装jq${Font_Suffix}";
+        exit;
+    fi
+    
+    jq -V > /dev/null 2>&1;
+    if [ $? -ne 0 ];then
+        echo -e "${Font_Red}请手动安装jq${Font_Suffix}";
+        exit;
+    fi
 }
 function PharseJSON() {
     # 使用方法: PharseJSON "要解析的原JSON文本" "要解析的键值"
     # Example: PharseJSON ""Value":"123456"" "Value" [返回结果: 123456]
     echo -n $1 | jq -r .$2;
+}
+
+function GameTest_Steam(){
+    echo -n -e " Steam Currency:\t\t\t->\c";
+    local result=`curl --user-agent "${UA_Browser}" -${1} -fsSL --max-time 30 https://store.steampowered.com/app/761830 | grep priceCurrency | cut -d '"' -f4`
+    if [ ! -n "$result" ]; then
+        echo -n -e "\r Steam Currency:\t\t\t${Font_Red}Failed (Network Connection)${Font_Suffix}\n"
+    else
+        echo -e "\r Steam Currency:\t\t\t${Font_Green}${result}${Font_Suffix}\n";
+    fi
 }
 
 function MediaUnlockTest_HBONow() {
@@ -55,7 +66,7 @@ function MediaUnlockTest_HBONow() {
     if [[ "$result" != "curl"* ]]; then
         # 下载页面成功，开始解析跳转
         if [ "${result}" = "https://play.hbonow.com" ] || [ "${result}" = "https://play.hbonow.com/" ]; then
-            echo -n -e "\r HBO Now:\t\t\t\t${Font_Green}Yes${Font_Suffix}\n" && echo "HBO Now:YES">>check.log;
+            echo -n -e "\r HBO Now:\t\t\t\t${Font_Green}Yes${Font_Suffix}\n" && echo "HBO Now:YES" >> check.log;
             elif [ "${result}" = "http://hbogeo.cust.footprint.net/hbonow/geo.html" ] || [ "${result}" = "http://geocust.hbonow.com/hbonow/geo.html" ]; then
             echo -n -e "\r HBO Now:\t\t\t\t${Font_Red}No${Font_Suffix}\n" && echo "HBO Now:NO">>check.log;
         else
@@ -318,6 +329,7 @@ function MediaUnlockTest() {
     MediaUnlockTest_Netflix ${1};
     MediaUnlockTest_YouTube_Region ${1};
     MediaUnlockTest_DisneyPlus ${1};
+    GameTest_Steam ${1};
 }
 
 curl -V > /dev/null 2>&1;
@@ -328,7 +340,7 @@ fi
 
 jq -V > /dev/null 2>&1;
 if [ $? -ne 0 ];then
-   InstallJQ;
+    InstallJQ;
 fi
 echo " ** 正在测试IPv4解锁情况" && echo "正在测试IPv4解锁情况" >> check.log;
 check4=`ping 1.1.1.1 -c 1 2>&1`;
