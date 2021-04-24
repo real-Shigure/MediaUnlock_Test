@@ -376,5 +376,5 @@ else
     echo -e "${Font_SkyBlue}当前主机不支持IPv6,跳过...${Font_Suffix}" && echo "当前主机不支持IPv6,跳过..." >> check.log;
 fi
 
-PasteBin_Upload;
 echo -e "${Font_Green}本次测试结果已保存到 check.log ${Font_Suffix}";
+cat check.log | PasteBin_Upload
