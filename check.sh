@@ -19,7 +19,7 @@ echo -e "${Font_Purple}项目地址 https://github.com/CoiaPrant/MediaUnlock_Tes
 echo -e "${Font_Purple}反馈 https://t.me/CoiaPrant${Font_Suffix}" && echo -e "反馈 https://t.me/CoiaPrant" >> ${LOG_FILE};
 echo -e "${Font_Purple}声明 本测试工具根据GPL V3协议开源，严禁倒卖${Font_Suffix}" && echo -e "声明 本测试工具根据GPL V3协议开源，严禁倒卖" >> ${LOG_FILE};
 echo -e "${Font_Purple}提示 本工具测试结果仅供参考，请以实际使用为准${Font_Suffix}" && echo -e "提示 本工具测试结果仅供参考，请以实际使用为准" >> ${LOG_FILE};
-echo -e "${Font_Purple}国家代码：http://www.loglogo.com/front/countryCode/${Font_Suffix}" && echo -e "国家代码：http://www.loglogo.com/front/countryCode/" >> ${LOG_FILE};
+echo -e "${Font_Purple}国家代码 http://www.loglogo.com/front/countryCode/${Font_Suffix}" && echo -e "国家代码 http://www.loglogo.com/front/countryCode/" >> ${LOG_FILE};
 echo -e " ** 当前版本: v${shell_version}" && echo -e " ** 当前版本: v${shell_version}" >> ${LOG_FILE};
 echo -e " ** 系统时间: $(date)" && echo -e " ** 系统时间: $(date)" >> ${LOG_FILE};
 
@@ -61,9 +61,9 @@ function PasteBin_Upload() {
         --data "expiration=${PASTEBIN_EXPIRATION:-}" \
     --data "syntax=${PASTEBIN_SYNTAX:-text}")"
     if [ "$?" = "0" ]; then
-        echo -e "${Font_Green}报告链接: ${uploadresult} ${Font_Suffix}";
+        echo -e "${Font_Green}已生成报告 ${uploadresult} ${Font_Suffix}";
     else
-        echo -e "${Font_Red}报告生成失败 ${Font_Suffix}";
+        echo -e "${Font_Red}生成报告失败 ${Font_Suffix}";
     fi
 }
 
