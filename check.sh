@@ -1,5 +1,5 @@
 #!/bin/bash
-shell_version="1.3.3";
+shell_version="1.3.4";
 UA_Browser="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.87 Safari/537.36";
 UA_Dalvik="Dalvik/2.1.0 (Linux; U; Android 9; ALP-AL00 Build/HUAWEIALP-AL00)";
 Font_Black="\033[30m";
@@ -18,11 +18,11 @@ export LANGUAGE="en_US";
 export LC_ALL="en_US";
 
 clear;
-echo -e "${Font_Red}项目地址 https://github.com/CoiaPrant/MediaUnlock_Test ${Font_Suffix}";
-echo -e "${Font_Red}反馈 https://t.me/CoiaPrant${Font_Suffix}";
-echo -e "${Font_Red}声明 本测试工具根据GPL V3协议开源，严禁倒卖${Font_Suffix}";
-echo -e "${Font_Red}提示 本工具测试结果仅供参考，请以实际使用为准${Font_Suffix}";
-echo -e "${Font_Red}国家代码：http://www.loglogo.com/front/countryCode/ ${Font_Suffix}"
+echo -e "${Font_Purple}项目地址 https://github.com/CoiaPrant/MediaUnlock_Test ${Font_Suffix}";
+echo -e "${Font_Purple}反馈 https://t.me/CoiaPrant${Font_Suffix}";
+echo -e "${Font_Purple}声明 本测试工具根据GPL V3协议开源，严禁倒卖${Font_Suffix}";
+echo -e "${Font_Purple}提示 本工具测试结果仅供参考，请以实际使用为准${Font_Suffix}";
+echo -e "${Font_Purple}国家代码：http://www.loglogo.com/front/countryCode/ ${Font_Suffix}"
 echo -e " ** Version: v${shell_version}" && echo $(date) > ${LOG_FILE};
 
 function InstallJQ() {
@@ -61,15 +61,15 @@ function PasteBin_Upload() {
         --data "expiration=${PASTEBIN_EXPIRATION:-}" \
         --data "syntax=${PASTEBIN_SYNTAX:-text}")"
     if [ "$?" = "0" ]; then
-        echo -e "${Font_Green} 报告链接: ${uploadresult} ${Font_Suffix}";
+        echo -e "${Font_Green}报告链接: ${uploadresult} ${Font_Suffix}";
     else
-        echo -e "${Font_Red} 报告生成失败 ${Font_Suffix}";
+        echo -e "${Font_Red}报告生成失败 ${Font_Suffix}";
     fi
 }
 
 function GameTest_Steam(){
     echo -n -e " Steam Currency:\t\t\t->\c";
-    local result=`curl --user-agent "${UA_Browser}" -${1} -fsSL --max-time 30 https://store.steampowered.com/app/761830 | grep priceCurrency | cut -d '"' -f4`
+    local result=`curl --user-agent "${UA_Browser}" -${1} -fsSL --max-time 30 https://store.steampowered.com/app/761830 | grep priceCurrency | cut -d '"' -f4`;
     if [ ! -n "$result" ]; then
         echo -n -e "\r Steam Currency:\t\t\t${Font_Red}Failed (Network Connection)${Font_Suffix}\n" && echo -e " Steam Currency:\t\t\tFailed (Network Connection)" >> ${LOG_FILE};
     else
@@ -360,7 +360,7 @@ jq -V > /dev/null 2>&1;
 if [ $? -ne 0 ];then
     InstallJQ;
 fi
-echo " ** 正在测试IPv4解锁情况" && echo "正在测试IPv4解锁情况" >> ${LOG_FILE};
+echo " ** 正在测试IPv4解锁情况" && echo " ** 正在测试IPv4解锁情况" >> ${LOG_FILE};
 check4=`ping 1.1.1.1 -c 1 2>&1`;
 if [[ "$check4" != *"unreachable"* ]] && [[ "$check4" != *"Unreachable"* ]];then
     MediaUnlockTest 4;
@@ -368,7 +368,7 @@ else
     echo -e "${Font_SkyBlue}当前主机不支持IPv4,跳过...${Font_Suffix}" && echo "当前主机不支持IPv4,跳过..." >> ${LOG_FILE};
 fi
 
-echo " ** 正在测试IPv6解锁情况" && echo "正在测试IPv6解锁情况" >> ${LOG_FILE};
+echo " ** 正在测试IPv6解锁情况" && echo " ** 正在测试IPv6解锁情况" >> ${LOG_FILE};
 check6=`ping6 240c::6666 -c 1 2>&1`;
 if [[ "$check6" != *"unreachable"* ]] && [[ "$check6" != *"Unreachable"* ]];then
     MediaUnlockTest 6;
