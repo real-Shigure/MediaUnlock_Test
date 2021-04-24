@@ -293,16 +293,16 @@ function MediaUnlockTest_DisneyPlus() {
     fi
     
     if [[ "$result" == *"https://preview.disneyplus.com/unavailable/"* ]];then
-        echo -n -e "\r DisneyPlus:\t\t\t\t${Font_Red}Unsupport${Font_Suffix}\n" && echo "DisneyPlus:Unsupport">>check.log;
+        echo -n -e "\r DisneyPlus:\t\t\t\t${Font_Red}Unsupport${Font_Suffix}\n" && echo -n -e "\r DisneyPlus:\t\t\t\t${Font_Red}Unsupport${Font_Suffix}\n" >> check.log;
         return;
     fi
     
     if [[ "$result" == *"releaseYear"* ]];then
-        echo -n -e "\r DisneyPlus:\t\t\t\t${Font_Green}Yes${Font_Suffix}\n" && echo "DisneyPlus:YES">>check.log;
+        echo -n -e "\r DisneyPlus:\t\t\t\t${Font_Green}Yes${Font_Suffix}\n" && echo -n -e "\r DisneyPlus:\t\t\t\t${Font_Green}Yes${Font_Suffix}\n" >> check.log;
         return;
     fi
     
-    echo -n -e "\r DisneyPlus:\t\t\t\t${Font_Red}No${Font_Suffix}\n" && echo "DisneyPlus:NO">>check.log;
+    echo -n -e "\r DisneyPlus:\t\t\t\t${Font_Red}No${Font_Suffix}\n" && echo -n -e "\r DisneyPlus:\t\t\t\t${Font_Red}No${Font_Suffix}\n" >> check.log;
     return;
 }
 
@@ -330,12 +330,12 @@ jq -V > /dev/null 2>&1;
 if [ $? -ne 0 ];then
    InstallJQ;
 fi
-echo " ** 正在测试IPv4解锁情况" && echo "正在测试IPv4解锁情况">>check.log;
+echo " ** 正在测试IPv4解锁情况" && echo "正在测试IPv4解锁情况" >> check.log;
 check4=`ping 1.1.1.1 -c 1 2>&1`;
 if [[ "$check4" != *"unreachable"* ]] && [[ "$check4" != *"Unreachable"* ]];then
     MediaUnlockTest 4;
 else
-    echo -e "${Font_SkyBlue}当前主机不支持IPv4,跳过...${Font_Suffix}" && echo "当前主机不支持IPv4,跳过...">>check.log;
+    echo -e "${Font_SkyBlue}当前主机不支持IPv4,跳过...${Font_Suffix}" && echo "当前主机不支持IPv4,跳过..." >> check.log;
 fi
 
 echo " ** 正在测试IPv6解锁情况" && echo "正在测试IPv6解锁情况">>check.log;
@@ -343,5 +343,7 @@ check6=`ping6 240c::6666 -c 1 2>&1`;
 if [[ "$check6" != *"unreachable"* ]] && [[ "$check6" != *"Unreachable"* ]];then
     MediaUnlockTest 6;
 else
-    echo -e "${Font_SkyBlue}当前主机不支持IPv6,跳过...${Font_Suffix}" && echo "当前主机不支持IPv6,跳过...">>check.log;
+    echo -e "${Font_SkyBlue}当前主机不支持IPv6,跳过...${Font_Suffix}" && echo "当前主机不支持IPv6,跳过..." >> check.log;
 fi
+
+echo -e "${Font_Green}本次测试结果已保存到 check.log ${Font_Suffix}";
