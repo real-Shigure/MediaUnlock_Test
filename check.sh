@@ -43,10 +43,28 @@ function InstallJQ() {
         exit;
     fi
 }
+
 function PharseJSON() {
     # 使用方法: PharseJSON "要解析的原JSON文本" "要解析的键值"
     # Example: PharseJSON ""Value":"123456"" "Value" [返回结果: 123456]
     echo -n $1 | jq -r .$2;
+}
+
+function PasteBin_Upload() {
+    local uploadresult="$(curl -fsL -X POST \
+        --url https://paste.ubuntu.com \
+        --output /dev/null \
+        --write-out "%{url_effective}\n" \
+        --data-urlencode "content@${PASTEBIN_CONTENT:-/dev/stdin}" \
+        --data "poster=${PASTEBIN_POSTER:-MediaUnlock_Test By CoiaPrant}" \
+        --data "expiration=${PASTEBIN_EXPIRATION:-}" \
+        --data "syntax=${PASTEBIN_SYNTAX:-text}")"
+    if [ "$?" = "0" ]; then
+        echo -e "${Msg_Success}Report Generate Success！Please save the follwing link:"
+        echo -e "${Msg_Info}Report URL: ${uploadresult}"
+    else
+        echo -e "${Msg_Warning}Report Generate Failure, But you can still read $HOME/LemonBench.Result.txt to get this result！"
+    fi
 }
 
 function GameTest_Steam(){
@@ -358,4 +376,5 @@ else
     echo -e "${Font_SkyBlue}当前主机不支持IPv6,跳过...${Font_Suffix}" && echo "当前主机不支持IPv6,跳过..." >> check.log;
 fi
 
+PasteBin_Upload;
 echo -e "${Font_Green}本次测试结果已保存到 check.log ${Font_Suffix}";
