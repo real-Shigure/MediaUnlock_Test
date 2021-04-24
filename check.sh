@@ -69,13 +69,12 @@ function PasteBin_Upload() {
 
 function GameTest_Steam(){
     echo -n -e " Steam Currency:\t\t\t->\c";
-    local result=`curl --user-agent "${UA_Browser}" -${1} -fsSL --max-time 30 https://store.steampowered.com/app/761830 2>&1`;
+    local result=`curl --user-agent "${UA_Browser}" -${1} -fsSL --max-time 30 https://store.steampowered.com/app/761830 2>&1 | grep priceCurrency | cut -d '"' -f4`;
     
-    if [[ "$result" == "curl*" ]]; then
+    if [ ! -n "$result" ]; then
         echo -n -e "\r Steam Currency:\t\t\t${Font_Red}Failed (Network Connection)${Font_Suffix}\n" && echo -e " Steam Currency:\t\t\tFailed (Network Connection)" >> ${LOG_FILE};
     else
-        local result=`echo ${result} | grep priceCurrency | cut -d '"' -f4`;
-        echo -e "\r Steam Currency:\t\t\t${Font_Green}${result}${Font_Suffix}\n" && echo -e " Steam Currency:\t\t\t${result}" >> ${LOG_FILE};
+        echo -n -e "\r Steam Currency:\t\t\t${Font_Green}${result}${Font_Suffix}\n" && echo -e " Steam Currency:\t\t\t${result}" >> ${LOG_FILE};
     fi
 }
 
