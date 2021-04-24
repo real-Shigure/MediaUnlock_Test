@@ -1,5 +1,5 @@
 #!/bin/bash
-shell_version="1.3.2";
+shell_version="1.3.3";
 UA_Browser="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.87 Safari/537.36";
 UA_Dalvik="Dalvik/2.1.0 (Linux; U; Android 9; ALP-AL00 Build/HUAWEIALP-AL00)";
 Font_Black="\033[30m";
@@ -21,7 +21,7 @@ echo -e "${Font_Red}项目地址 https://github.com/CoiaPrant/MediaUnlock_Test $
 echo -e "${Font_Red}反馈 https://t.me/CoiaPrant${Font_Suffix}";
 echo -e "${Font_Red}声明 本测试工具根据GPL V3协议开源，严禁倒卖${Font_Suffix}";
 echo -e "${Font_Red}提示 本工具测试结果仅供参考，请以实际使用为准${Font_Suffix}";
-echo -e " ** Version: v${shell_version}";
+echo -e " ** Version: v${shell_version}" && echo $(date +%F%n%T)>check.log;
 
 function InstallJQ() {
 	#安装JQ
@@ -55,15 +55,15 @@ function MediaUnlockTest_HBONow() {
     if [[ "$result" != "curl"* ]]; then
         # 下载页面成功，开始解析跳转
         if [ "${result}" = "https://play.hbonow.com" ] || [ "${result}" = "https://play.hbonow.com/" ]; then
-            echo -n -e "\r HBO Now:\t\t\t\t${Font_Green}Yes${Font_Suffix}\n";
+            echo -n -e "\r HBO Now:\t\t\t\t${Font_Green}Yes${Font_Suffix}\n" && echo "HBO Now:YES">>check.log;
             elif [ "${result}" = "http://hbogeo.cust.footprint.net/hbonow/geo.html" ] || [ "${result}" = "http://geocust.hbonow.com/hbonow/geo.html" ]; then
-            echo -n -e "\r HBO Now:\t\t\t\t${Font_Red}No${Font_Suffix}\n";
+            echo -n -e "\r HBO Now:\t\t\t\t${Font_Red}No${Font_Suffix}\n" && echo "HBO Now:NO">>check.log;
         else
-            echo -n -e "\r HBO Now:\t\t\t\t${Font_Yellow}Failed (Parse Json)${Font_Suffix}\n";
+            echo -n -e "\r HBO Now:\t\t\t\t${Font_Yellow}Failed (Parse Json)${Font_Suffix}\n" && echo "HBO Now:Failed (Parse Json)">>check.log;
         fi
     else
         # 下载页面失败，返回错误代码
-        echo -e "\r HBO Now:\t\t\t\t${Font_Red}Failed (Network Connection)${Font_Suffix}\n";
+        echo -e "\r HBO Now:\t\t\t\t${Font_Red}Failed (Network Connection)${Font_Suffix}\n" && echo "HBO Now:Failed (Network Connection)">>check.log;
     fi
 }
 
@@ -72,28 +72,28 @@ function MediaUnlockTest_BahamutAnime() {
     echo -n -e " Bahamut Anime:\t\t\t\t->\c";
     local tmpresult=`curl -${1} --user-agent "${UA_Browser}" --max-time 30 -fsSL 'https://ani.gamer.com.tw/ajax/token.php?adID=89422&sn=14667' 2>&1`;
     if [[ "$tmpresult" == "curl"* ]]; then
-        echo -n -e "\r Bahamut Anime:\t\t\t\t${Font_Red}Failed (Network Connection)${Font_Suffix}\n";
+        echo -n -e "\r Bahamut Anime:\t\t\t\t${Font_Red}Failed (Network Connection)${Font_Suffix}\n" && echo "Bahamut Anime:Failed (Network Connection)">>check.log;
         return;
     fi
     local result="$(PharseJSON "$tmpresult" "animeSn")";
     if [ "$result" != "null" ]; then
         resultverify="$(echo $result | grep -oE '[0-9]{1,}')";
         if [ "$?" = "0" ]; then
-            echo -n -e "\r Bahamut Anime:\t\t\t\t${Font_Green}Yes${Font_Suffix}\n";
+            echo -n -e "\r Bahamut Anime:\t\t\t\t${Font_Green}Yes${Font_Suffix}\n" && echo "Bahamut Anime:YES">>check.log;
         else
-            echo -n -e "\r Bahamut Anime:\t\t\t\t${Font_Red}Failed (Parse Json)${Font_Suffix}\n";
+            echo -n -e "\r Bahamut Anime:\t\t\t\t${Font_Red}Failed (Parse Json)${Font_Suffix}\n" && echo "Bahamut Anime:Failed (Parse Json)">>check.log;
         fi
     else
         local result="$(PharseJSON "$tmpresult" "error.code")";
         if [ "$result" != "null" ]; then
             resultverify="$(echo $result | grep -oE '[0-9]{1,}')";
             if [ "$?" = "0" ]; then
-                echo -n -e "\r Bahamut Anime:\t\t\t\t${Font_Red}No${Font_Suffix}\n";
+                echo -n -e "\r Bahamut Anime:\t\t\t\t${Font_Red}No${Font_Suffix}\n" && echo "Bahamut Anime:NO">>check.log;
             else
-                echo -n -e "\r Bahamut Anime:\t\t\t\t${Font_Red}Failed (Parse Json)${Font_Suffix}\n";
+                echo -n -e "\r Bahamut Anime:\t\t\t\t${Font_Red}Failed (Parse Json)${Font_Suffix}\n" && echo "Bahamut Anime:Failed (Parse Json)">>check.log;
             fi
         else
-            echo -n -e "\r Bahamut Anime:\t\t\t\t${Font_Red}Failed (Parse Json)${Font_Suffix}\n";
+            echo -n -e "\r Bahamut Anime:\t\t\t\t${Font_Red}Failed (Parse Json)${Font_Suffix}\n" && echo "Bahamut Anime:Failed (Parse Json)">>check.log;
         fi
     fi
 }
@@ -108,23 +108,23 @@ function MediaUnlockTest_BilibiliChinaMainland() {
         local result="$(PharseJSON "${result}" "code")";
         if [ "$?" = "0" ]; then
             if [ "${result}" = "0" ]; then
-                echo -n -e "\r BiliBili China Mainland Only:\t\t${Font_Green}Yes${Font_Suffix}\n";
+                echo -n -e "\r BiliBili China Mainland Only:\t\t${Font_Green}Yes${Font_Suffix}\n" && echo "BiliBili China Mainland Only:YES">>check.log;
                 elif [ "${result}" = "-10403" ]; then
-                echo -n -e "\r BiliBili China Mainland Only:\t\t${Font_Red}No${Font_Suffix}\n";
+                echo -n -e "\r BiliBili China Mainland Only:\t\t${Font_Red}No${Font_Suffix}\n" && echo "BiliBili China Mainland Only:NO">>check.log;
             else
-                echo -n -e "\r BiliBili China Mainland Only:\t\t${Font_Red}Failed${Font_Suffix} ${Font_SkyBlue}(${result})${Font_Suffix}\n";
+                echo -n -e "\r BiliBili China Mainland Only:\t\t${Font_Red}Failed${Font_Suffix} ${Font_SkyBlue}(${result})${Font_Suffix}\n" && echo "BiliBili China Mainland Only:Failed (${result})">>check.log;
             fi
         else
-            echo -n -e "\r BiliBili China Mainland Only:\t\t${Font_Red}Failed (Parse Json)${Font_Suffix}\n";
+            echo -n -e "\r BiliBili China Mainland Only:\t\t${Font_Red}Failed (Parse Json)${Font_Suffix}\n" && echo "BiliBili China Mainland Only:Failed (Parse Json)">>check.log;
         fi
     else
-        echo -n -e "\r BiliBili China Mainland Only:\t\t${Font_Red}Failed (Network Connection)${Font_Suffix}\n";
+        echo -n -e "\r BiliBili China Mainland Only:\t\t${Font_Red}Failed (Network Connection)${Font_Suffix}\n" && echo "BiliBili China Mainland Only:Failed (Network Connection)">>check.log;
     fi
 }
 
 # 流媒体解锁测试-哔哩哔哩港澳台限定
 function MediaUnlockTest_BilibiliHKMCTW() {
-    echo -n -e " BiliBili HongKong/Macau/Taiwan:\t->\c";
+    echo -n -e " BiliBili HK&MC&TW regions of PRC:\t->\c";
     local randsession="$(cat /dev/urandom | head -n 32 | md5sum | head -c 32)";
     # 尝试获取成功的结果
     local result=`curl --user-agent "${UA_Browser}" -${1} -fsSL --max-time 30 "https://api.bilibili.com/pgc/player/web/playurl?avid=18281381&cid=29892777&qn=0&type=&otype=json&ep_id=183799&fourk=1&fnver=0&fnval=16&session=${randsession}&module=bangumi" 2>&1`;
@@ -132,23 +132,23 @@ function MediaUnlockTest_BilibiliHKMCTW() {
         local result="$(PharseJSON "${result}" "code")";
         if [ "$?" = "0" ]; then
             if [ "${result}" = "0" ]; then
-                echo -n -e "\r BiliBili HongKong/Macau/Taiwan:\t${Font_Green}Yes${Font_Suffix}\n";
+                echo -n -e "\r BiliBili HK&MC&TW regions of PRC:\t${Font_Green}Yes${Font_Suffix}\n" && echo "BiliBili HK&MC&TW regions of PRC:YES">>check.log;
                 elif [ "${result}" = "-10403" ]; then
-                echo -n -e "\r BiliBili HongKong/Macau/Taiwan:\t${Font_Red}No${Font_Suffix}\n";
+                echo -n -e "\r BiliBili HK&MC&TW regions of PRC:\t${Font_Red}No${Font_Suffix}\n" && echo "BiliBili HK&MC&TW regions of PRC:NO">>check.log;
             else
-                echo -n -e "\r BiliBili HongKong/Macau/Taiwan:\t${Font_Red}Failed${Font_Suffix} ${Font_SkyBlue}(${result})${Font_Suffix}\n";
+                echo -n -e "\r BiliBili HK&MC&TW regions of PRC:\t${Font_Red}Failed${Font_Suffix} ${Font_SkyBlue}(${result})${Font_Suffix}\n" && echo "BiliBili HK&MC&TW regions of PRC:Failed (${result})">>check.log;
             fi
         else
-            echo -n -e "\r BiliBili HongKong/Macau/Taiwan:\t${Font_Red}Failed (Parse Json)${Font_Suffix}\n";
+            echo -n -e "\r BiliBili HK&MC&TW regions of PRC:\t${Font_Red}Failed (Parse Json)${Font_Suffix}\n" && echo "BiliBili HK&MC&TW regions of PRC:Failed (Parse Json)">>check.log;
         fi
     else
-        echo -n -e "\r BiliBili HongKong/Macau/Taiwan:\t${Font_Red}Failed (Network Connection)${Font_Suffix}\n";
+        echo -n -e "\r BiliBili HK&MC&TW regions of PRC:\t${Font_Red}Failed (Network Connection)${Font_Suffix}\n" && echo "BiliBili HK&MC&TW regions of PRC:Failed (Network Connection)">>check.log;
     fi
 }
 
 # 流媒体解锁测试-哔哩哔哩台湾限定
 function MediaUnlockTest_BilibiliTW() {
-    echo -n -e " Bilibili Taiwan Only:\t\t\t->\c";
+    echo -n -e " BiliBili Taiwan of PRC Only:\t\t->\c";
     local randsession="$(cat /dev/urandom | head -n 32 | md5sum | head -c 32)";
     # 尝试获取成功的结果
     local result=`curl --user-agent "${UA_Browser}" -${1} -fsSL --max-time 30 "https://api.bilibili.com/pgc/player/web/playurl?avid=50762638&cid=100279344&qn=0&type=&otype=json&ep_id=268176&fourk=1&fnver=0&fnval=16&session=${randsession}&module=bangumi" 2>&1`;
@@ -156,17 +156,17 @@ function MediaUnlockTest_BilibiliTW() {
         local result="$(PharseJSON "${result}" "code")";
         if [ "$?" = "0" ]; then
             if [ "${result}" = "0" ]; then
-                echo -n -e "\r Bilibili Taiwan Only:\t\t\t${Font_Green}Yes${Font_Suffix}\n";
+                echo -n -e "\r BiliBili Taiwan of PRC Only:\t\t${Font_Green}Yes${Font_Suffix}\n" && echo "BiliBili Taiwan of PRC Only:YES">>check.log;
                 elif [ "${result}" = "-10403" ]; then
-                echo -n -e "\r Bilibili Taiwan Only:\t\t\t${Font_Red}No${Font_Suffix}\n";
+                echo -n -e "\r BiliBili Taiwan of PRC Only:\t\t${Font_Red}No${Font_Suffix}\n" && echo "BiliBili Taiwan of PRC Only:NO">>check.log;
             else
-                echo -n -e "\r Bilibili Taiwan Only:\t\t\t${Font_Red}Failed${Font_Suffix} ${Font_SkyBlue}(${result})${Font_Suffix}\n";
+                echo -n -e "\r BiliBili Taiwan of PRC Only:\t\t${Font_Red}Failed${Font_Suffix} ${Font_SkyBlue}(${result})${Font_Suffix}\n" && echo "BiliBili Taiwan of PRC Only:Failed (${result})">>check.log;
             fi
         else
-            echo -n -e "\r Bilibili Taiwan Only:\t\t\t${Font_Red}Failed (Parse Json)${Font_Suffix}\n";
+            echo -n -e "\r BiliBili Taiwan of PRC Only:\t\t${Font_Red}Failed (Parse Json)${Font_Suffix}\n" && echo "BiliBili Taiwan of PRC Only:Failed (Parse Json)">>check.log;
         fi
     else
-        echo -n -e "\r Bilibili Taiwan Only:\t\t\t${Font_Red}Failed (Network Connection)${Font_Suffix}\n";
+        echo -n -e "\r BiliBili Taiwan of PRC Only:\t\t${Font_Red}Failed (Network Connection)${Font_Suffix}\n" && echo "BiliBili Taiwan of PRC Only:Failed (Network Connection)">>check.log;
     fi
 }
 
@@ -177,21 +177,21 @@ function MediaUnlockTest_AbemaTV_IPTest() {
     #
     local result=`curl --user-agent "${UA_Dalvik}" -${1} -fsL --write-out %{http_code} --max-time 30 "https://api.abema.io/v1/ip/check?device=android"`;
     if [[ "$result" == "000" ]]; then
-        echo -n -e "\r Abema.TV:\t\t\t\t${Font_Red}Failed (Network Connection)${Font_Suffix}\n";
+        echo -n -e "\r Abema.TV:\t\t\t\t${Font_Red}Failed (Network Connection)${Font_Suffix}\n" && echo "Abema.TV:Failed (Network Connection)">>check.log;
         return;
     fi
     local result=`curl --user-agent "${UA_Dalvik}" -${1} -fsL --max-time 30 "https://api.abema.io/v1/ip/check?device=android"`;
     local result="$(PharseJSON "${result}" "cdnRegionUrl")";
     if [ "$?" = "0" ]; then
         if [ "${result}" = "https://ds-linear-abematv.akamaized.net/region" ] || [ "${result}" = "https://ds-glb-linear-abematv.akamaized.net/region" ]; then
-            echo -n -e "\r Abema.TV:\t\t\t\t${Font_Green}Yes${Font_Suffix}\n";
+            echo -n -e "\r Abema.TV:\t\t\t\t${Font_Green}Yes${Font_Suffix}\n" && echo "Abema.TV:YES">>check.log;
             elif [ "${result}" = "" ] || [ "${result}" = "null" ]; then
-            echo -n -e "\r Abema.TV:\t\t\t\t${Font_Red}No${Font_Suffix}\n";
+            echo -n -e "\r Abema.TV:\t\t\t\t${Font_Red}No${Font_Suffix}\n" && echo "Abema.TV:NO">>check.log;
         else
-            echo -n -e "\r Abema.TV:\t\t\t\t${Font_Red}Failed${Font_Suffix}\n";
+            echo -n -e "\r Abema.TV:\t\t\t\t${Font_Red}Failed${Font_Suffix}\n" && echo "Abema.TV:Failed">>check.log;
         fi
     else
-        echo -n -e "\r Abema.TV:\t\t\t\t${Font_Red}Failed (Parse Json)${Font_Suffix}\n";
+        echo -n -e "\r Abema.TV:\t\t\t\t${Font_Red}Failed (Parse Json)${Font_Suffix}\n" && echo "Abema.TV:Failed (Parse Json)">>check.log;
     fi
 }
 
@@ -200,13 +200,13 @@ function MediaUnlockTest_PCRJP() {
     # 测试，连续请求两次 (单独请求一次可能会返回35, 第二次开始变成0)
     local result=`curl --user-agent "${UA_Dalvik}" -${1} -fsL --write-out %{http_code} --output /dev/null --max-time 30 https://api-priconne-redive.cygames.jp/`;
     if [ "$result" = "000" ]; then
-        echo -n -e "\r Princess Connect Re:Dive Japan:\t${Font_Red}Failed (Network Connection)${Font_Suffix}\n";
+        echo -n -e "\r Princess Connect Re:Dive Japan:\t${Font_Red}Failed (Network Connection)${Font_Suffix}\n" && echo "Princess Connect Re:Dive Japan:Failed (Network Connection)">>check.log;
         elif [ "$result" = "404" ]; then
-        echo -n -e "\r Princess Connect Re:Dive Japan:\t${Font_Green}Yes${Font_Suffix}\n";
+        echo -n -e "\r Princess Connect Re:Dive Japan:\t${Font_Green}Yes${Font_Suffix}\n" && echo "Princess Connect Re:Dive Japan:YES">>check.log;
         elif [ "$result" = "403" ]; then
-        echo -n -e "\r Princess Connect Re:Dive Japan:\t${Font_Red}No${Font_Suffix}\n";
+        echo -n -e "\r Princess Connect Re:Dive Japan:\t${Font_Red}No${Font_Suffix}\n" && echo "Princess Connect Re:Dive Japan:NO">>check.log;
     else
-        echo -n -e "\r Princess Connect Re:Dive Japan:\t${Font_Red}Failed (Unexpected Result: $result)${Font_Suffix}\n";
+        echo -n -e "\r Princess Connect Re:Dive Japan:\t${Font_Red}Failed (Unexpected Result: $result)${Font_Suffix}\n" && echo "Princess Connect Re:Dive Japan:Failed (Unexpected Result: $result)">>check.log;
     fi
 }
 
@@ -214,13 +214,13 @@ function MediaUnlockTest_BBC() {
     echo -n -e " BBC:\t\t\t\t\t->\c";
     local result=`curl --user-agent "${UA_Browser}" -${1} -fsL --write-out %{http_code} --output /dev/null --max-time 30 http://ve-dash-uk.live.cf.md.bbci.co.uk/`;
     if [ "${result}" = "000" ]; then
-        echo -n -e "\r BBC:\t\t\t\t\t${Font_Red}Failed (Network Connection)${Font_Suffix}\n";
+        echo -n -e "\r BBC:\t\t\t\t\t${Font_Red}Failed (Network Connection)${Font_Suffix}\n" && echo "BBC:Failed (Network Connection)">>check.log;
         elif [ "${result}" = "403" ]; then
-        echo -n -e "\r BBC:\t\t\t\t\t${Font_Red}No${Font_Suffix}\n";
+        echo -n -e "\r BBC:\t\t\t\t\t${Font_Red}No${Font_Suffix}\n" && echo "BBC:NO">>check.log;
         elif [ "${result}" = "404" ]; then
-        echo -n -e "\r BBC:\t\t\t\t\t${Font_Green}Yes${Font_Suffix}\n";
+        echo -n -e "\r BBC:\t\t\t\t\t${Font_Green}Yes${Font_Suffix}\n" && echo "BBC:YES">>check.log;
     else
-        echo -n -e "\r BBC:\t\t\t\t\t${Font_Red}Failed (Unexpected Result: $result)${Font_Suffix}\n";
+        echo -n -e "\r BBC:\t\t\t\t\t${Font_Red}Failed (Unexpected Result: $result)${Font_Suffix}\n" && echo "BBC:Failed (Unexpected Result: $result)">>check.log;
     fi
 }
 
@@ -228,18 +228,18 @@ function MediaUnlockTest_Netflix() {
     echo -n -e " Netflix:\t\t\t\t->\c";
     local result=`curl -${1} --user-agent "${UA_Browser}" -sSL "https://www.netflix.com/" 2>&1`;
     if [ "$result" == "Not Available" ];then
-        echo -n -e "\r Netflix:\t\t\t\t${Font_Red}Unsupport${Font_Suffix}\n"
+        echo -n -e "\r Netflix:\t\t\t\t${Font_Red}Unsupport${Font_Suffix}\n" && echo "Netflix:Unsupport">>check.log;
         return;
     fi
     
     if [[ "$result" == "curl"* ]];then
-        echo -n -e "\r Netflix:\t\t\t\t${Font_Red}Failed (Network Connection)${Font_Suffix}\n"
+        echo -n -e "\r Netflix:\t\t\t\t${Font_Red}Failed (Network Connection)${Font_Suffix}\n" && echo "Netflix:Failed (Network Connection)">>check.log;
         return;
     fi
     
     local result=`curl -${1} --user-agent "${UA_Browser}" -sL "https://www.netflix.com/title/80018499" 2>&1`;
     if [[ "$result" == *"page-404"* ]] || [[ "$result" == *"NSEZ-403"* ]];then
-        echo -n -e "\r Netflix:\t\t\t\t${Font_Red}No${Font_Suffix}\n"
+        echo -n -e "\r Netflix:\t\t\t\t${Font_Red}No${Font_Suffix}\n" && echo "Netflix:NO">>check.log;
         return;
     fi
     
@@ -251,7 +251,7 @@ function MediaUnlockTest_Netflix() {
     local result6=`curl -${1} --user-agent "${UA_Browser}" -sL "https://www.netflix.com/title/70202589" 2>&1`;
     
     if [[ "$result1" == *"page-404"* ]] && [[ "$result2" == *"page-404"* ]] && [[ "$result3" == *"page-404"* ]] && [[ "$result4" == *"page-404"* ]] && [[ "$result5" == *"page-404"* ]] && [[ "$result6" == *"page-404"* ]];then
-        echo -n -e "\r Netflix:\t\t\t\t${Font_Yellow}Only Homemade${Font_Suffix}\n"
+        echo -n -e "\r Netflix:\t\t\t\t${Font_Yellow}Only Homemade${Font_Suffix}\n" && echo "Netflix:Only Homemade">>check.log;
         return;
     fi
     
@@ -260,7 +260,7 @@ function MediaUnlockTest_Netflix() {
     if [[ ! -n "$region" ]];then
         region="US";
     fi
-    echo -n -e "\r Netflix:\t\t\t\t${Font_Green}Yes(Region: ${region})${Font_Suffix}\n"
+    echo -n -e "\r Netflix:\t\t\t\t${Font_Green}Yes(Region: ${region})${Font_Suffix}\n" && echo "Netflix:YES (Region: ${region})">>check.log;
     return;
 }
 
@@ -269,17 +269,17 @@ function MediaUnlockTest_YouTube_Region() {
     local result=`curl --user-agent "${UA_Browser}" -${1} -sSL "https://www.youtube.com/" 2>&1`;
     
     if [[ "$result" == "curl"* ]];then
-        echo -n -e "\r YouTube Region:\t\t\t${Font_Red}Failed (Network Connection)${Font_Suffix}\n";
+        echo -n -e "\r YouTube Region:\t\t\t${Font_Red}Failed (Network Connection)${Font_Suffix}\n" && echo "YouTube Region:Failed (Network Connection)">>check.log;
         return;
     fi
     
     local result=`curl --user-agent "${UA_Browser}" -${1} -sL "https://www.youtube.com/red" | sed 's/,/\n/g' | grep "countryCode" | cut -d '"' -f4`;
     if [ -n "$result" ]; then
-        echo -n -e "\r YouTube Region:\t\t\t${Font_Green}${result}${Font_Suffix}\n";
+        echo -n -e "\r YouTube Region:\t\t\t${Font_Green}${result}${Font_Suffix}\n" && echo "YouTube Region:${result}">>check.log;
         return;
     fi
     
-    echo -n -e "\r YouTube Region:\t\t\t${Font_Red}No${Font_Suffix}\n";
+    echo -n -e "\r YouTube Region:\t\t\t${Font_Red}No${Font_Suffix}\n" && echo "YouTube Region:NO">>check.log;
     return;
 }
 
@@ -288,21 +288,21 @@ function MediaUnlockTest_DisneyPlus() {
     local result=`curl -${1} --user-agent "${UA_Browser}" -sSL "https://www.disneyplus.com/movies/drain-the-titanic/5VNZom2KYtlb" 2>&1`;
     
     if [[ "$result" == "curl"* ]];then
-        echo -n -e "\r DisneyPlus:\t\t\t\t${Font_Red}Failed (Network Connection)${Font_Suffix}\n";
+        echo -n -e "\r DisneyPlus:\t\t\t\t${Font_Red}Failed (Network Connection)${Font_Suffix}\n" && echo "DisneyPlus:Failed (Network Connection)">>check.log;
         return;
     fi
     
     if [[ "$result" == *"https://preview.disneyplus.com/unavailable/"* ]];then
-        echo -n -e "\r DisneyPlus:\t\t\t\t${Font_Red}Unsupport${Font_Suffix}\n";
+        echo -n -e "\r DisneyPlus:\t\t\t\t${Font_Red}Unsupport${Font_Suffix}\n" && echo "DisneyPlus:Unsupport">>check.log;
         return;
     fi
     
     if [[ "$result" == *"releaseYear"* ]];then
-        echo -n -e "\r DisneyPlus:\t\t\t\t${Font_Green}Yes${Font_Suffix}\n";
+        echo -n -e "\r DisneyPlus:\t\t\t\t${Font_Green}Yes${Font_Suffix}\n" && echo "DisneyPlus:YES">>check.log;
         return;
     fi
     
-    echo -n -e "\r DisneyPlus:\t\t\t\t${Font_Red}No${Font_Suffix}\n";
+    echo -n -e "\r DisneyPlus:\t\t\t\t${Font_Red}No${Font_Suffix}\n" && echo "DisneyPlus:NO">>check.log;
     return;
 }
 
@@ -330,18 +330,18 @@ jq -V > /dev/null 2>&1;
 if [ $? -ne 0 ];then
    InstallJQ;
 fi
-echo " ** 正在测试IPv4解锁情况";
+echo " ** 正在测试IPv4解锁情况" && echo "正在测试IPv4解锁情况">>check.log;
 check4=`ping 1.1.1.1 -c 1 2>&1`;
 if [[ "$check4" != *"unreachable"* ]] && [[ "$check4" != *"Unreachable"* ]];then
     MediaUnlockTest 4;
 else
-    echo -e "${Font_SkyBlue}当前主机不支持IPv4,跳过...${Font_Suffix}";
+    echo -e "${Font_SkyBlue}当前主机不支持IPv4,跳过...${Font_Suffix}" && echo "当前主机不支持IPv4,跳过...">>check.log;
 fi
 
-echo " ** 正在测试IPv6解锁情况";
+echo " ** 正在测试IPv6解锁情况" && echo "正在测试IPv6解锁情况">>check.log;
 check6=`ping6 240c::6666 -c 1 2>&1`;
 if [[ "$check6" != *"unreachable"* ]] && [[ "$check6" != *"Unreachable"* ]];then
     MediaUnlockTest 6;
 else
-    echo -e "${Font_SkyBlue}当前主机不支持IPv6,跳过...${Font_Suffix}";
+    echo -e "${Font_SkyBlue}当前主机不支持IPv6,跳过...${Font_Suffix}" && echo "当前主机不支持IPv6,跳过...">>check.log;
 fi
