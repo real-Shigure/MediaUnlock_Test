@@ -13,17 +13,19 @@ Font_White="\033[37m";
 Font_Suffix="\033[0m";
 LOG_FILE="check.log";
 
+clear;
+echo -e "流媒体解锁测试 MediaUnlock_Test" && echo -e "流媒体解锁测试 MediaUnlock_Test" > ${LOG_FILE};
+echo -e "${Font_Purple}项目地址 https://github.com/CoiaPrant/MediaUnlock_Test ${Font_Suffix}" && echo -e "项目地址 https://github.com/CoiaPrant/MediaUnlock_Test" >> ${LOG_FILE};
+echo -e "${Font_Purple}反馈 https://t.me/CoiaPrant${Font_Suffix}" && echo -e"反馈 https://t.me/CoiaPrant" >> ${LOG_FILE};
+echo -e "${Font_Purple}声明 本测试工具根据GPL V3协议开源，严禁倒卖${Font_Suffix}" && echo -e "声明 本测试工具根据GPL V3协议开源，严禁倒卖" >> ${LOG_FILE};
+echo -e "${Font_Purple}提示 本工具测试结果仅供参考，请以实际使用为准${Font_Suffix}" && echo -e "提示 本工具测试结果仅供参考，请以实际使用为准" >> ${LOG_FILE};
+echo -e "${Font_Purple}国家代码：http://www.loglogo.com/front/countryCode/${Font_Suffix}" && echo -e "国家代码：http://www.loglogo.com/front/countryCode/" >> ${LOG_FILE};
+echo -e " ** 当前版本: v${shell_version}" && echo -e  " ** 当前版本: v${shell_version} >> ${LOG_FILE};
+echo -e " ** 系统时间: $(date)" && echo -e " ** 系统时间: $(date)" >> ${LOG_FILE};
+
 export LANG="en_US";
 export LANGUAGE="en_US";
 export LC_ALL="en_US";
-
-clear;
-echo -e "${Font_Purple}项目地址 https://github.com/CoiaPrant/MediaUnlock_Test ${Font_Suffix}";
-echo -e "${Font_Purple}反馈 https://t.me/CoiaPrant${Font_Suffix}";
-echo -e "${Font_Purple}声明 本测试工具根据GPL V3协议开源，严禁倒卖${Font_Suffix}";
-echo -e "${Font_Purple}提示 本工具测试结果仅供参考，请以实际使用为准${Font_Suffix}";
-echo -e "${Font_Purple}国家代码：http://www.loglogo.com/front/countryCode/ ${Font_Suffix}"
-echo -e " ** Version: v${shell_version}" && echo $(date) > ${LOG_FILE};
 
 function InstallJQ() {
     #安装JQ
@@ -57,7 +59,7 @@ function PasteBin_Upload() {
         --output /dev/null \
         --write-out "%{url_effective}\n" \
         --data-urlencode "content@${PASTEBIN_CONTENT:-/dev/stdin}" \
-        --data "poster=${PASTEBIN_POSTER:-MediaUnlock_Test By CoiaPrant}" \
+        --data "poster=${PASTEBIN_POSTER:-MediaUnlock_Test_By_CoiaPrant}" \
         --data "expiration=${PASTEBIN_EXPIRATION:-}" \
         --data "syntax=${PASTEBIN_SYNTAX:-text}")"
     if [ "$?" = "0" ]; then
