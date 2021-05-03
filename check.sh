@@ -39,6 +39,10 @@ function InstallJQ() {
         apt-get update -y > /dev/null;
         echo -e "${Font_Green}正在安装依赖: jq${Font_Suffix}";
         apt-get install jq > /dev/null;
+        elif [[ $(cat /etc/issue | grep '^ID=') =~ alpine ]];then
+        apk update > /dev/null;
+        echo -e "${Font_Green}正在安装依赖: jq${Font_Suffix}";
+        apk add jq > /dev/null;
     else
         echo -e "${Font_Red}请手动安装jq${Font_Suffix}";
         exit;
