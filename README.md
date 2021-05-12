@@ -2,7 +2,7 @@
 - 转载请注明出处
 - 本项目的测试结果仅供参考，不承担任何责任，请以实际为准
 - 本项目以GPL V3开源，任何人均可免费使用，严禁倒卖
-
+- 个人频道 [@CoiaPrant_Blog](https://t.me/CoiaPrant_Blog)
 ## 使用方法
 ~首先 Star本项目~
 
@@ -25,7 +25,6 @@
 
 ## BUG反馈
 [点此加群](https://t.me/zerocloud)
-
 [@CoiaPrant](https://t.me/CoiaPrant)
 
 ## 赞助
