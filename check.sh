@@ -40,7 +40,7 @@ function InstallJQ() {
         echo -e "${Font_Green}正在更新软件包列表...${Font_Suffix}";
         apt-get update -y > /dev/null;
         echo -e "${Font_Green}正在安装依赖: jq${Font_Suffix}";
-        apt-get install jq > /dev/null;
+        apt-get install jq -y > /dev/null;
         elif [[ $(cat /etc/issue | grep '^ID=') =~ alpine ]];then
         apk update > /dev/null;
         echo -e "${Font_Green}正在安装依赖: jq${Font_Suffix}";
