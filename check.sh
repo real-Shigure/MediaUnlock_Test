@@ -239,12 +239,12 @@ function MediaUnlockTest_AbemaTV_IPTest() {
     fi
     
     local result=`curl --user-agent "${UA_Dalvik}" -${1} -fsL --max-time 30 "https://api.abema.io/v1/ip/check?device=android" 2>&1`;
-    local result=$(PharseJSON "${result}" "isoCountryCode");
     if [ ! -n "$result" ]; then
         echo -n -e "\r Abema.TV:\t\t\t\t${Font_Red}No${Font_Suffix}\n" && echo -e " Abema.TV:\t\t\t\tNo" >> ${LOG_FILE};
         return;
     fi
-    
+
+    local result=$(PharseJSON "${result}" "isoCountryCode");
     if [[ "${result}" == "JP" ]];then
         echo -n -e "\r Abema.TV:\t\t\t\t${Font_Green}Yes${Font_Suffix}\n" && echo -e " Abema.TV:\t\t\t\tYes" >> ${LOG_FILE};
         return;
@@ -292,7 +292,7 @@ function MediaUnlockTest_UMAJP() {
 
 function MediaUnlockTest_Kancolle() {
     echo -n -e " Kancolle Japan:\t\t\t->\c";
-    local result=`curl --user-agent "${UA_Dalvik}" -${1} -fsL --write-out %{http_code} --output /dev/null --max-time 30 http://203.104.209.7/kcscontents/`;
+    local result=`curl --user-agent "${UA_Dalvik}" -${1} -fsL --write-out %{http_code} --output /dev/null --max-time 30 http://203.104.209.7/kcscontents/ 2》&1`;
     case ${result} in
         000)
             echo -n -e "\r Kancolle Japan:\t\t\t${Font_Red}Failed (Network Connection)${Font_Suffix}\n" && echo -e " Kancolle Japan:\t\t\tFailed (Network Connection)" >> ${LOG_FILE};
@@ -440,7 +440,7 @@ function MediaUnlockTest_Dazn() {
         echo -n -e "\r Dazn:\t\t\t\t\t${Font_Red}No${Font_Suffix}\n" && echo -e " Dazn:\t\t\t\t\tNo" >> ${LOG_FILE}
         return;
     fi
-    echo -n -e "\r Dazn:\t\t\t\t\t${Font_Green}Yes (Region: ${result})${Font_Suffix}\n" && echo -e " Dazn:\t\t\t\t\tYes (Region: ${result})" >> ${LOG_FILE}
+    echo -n -e "\r Dazn:\t\t\t\t\t${Font_Green}Yes(Region: ${result})${Font_Suffix}\n" && echo -e " Dazn:\t\t\t\t\tYes(Region: ${result})" >> ${LOG_FILE}
 }
 
 function MediaUnlockTest_HuluJP() {
