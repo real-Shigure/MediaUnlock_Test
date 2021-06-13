@@ -35,5 +35,5 @@
 ![wx.png](https://www.zeroteam.top/images/wx.png)
 ~~我真是厚颜无耻啊~~
 ## 特别鸣谢
-- (lmc999)[https://github.com/lmc999]
-- (柠檬 LemonBench)[https://t.me/ilemonrain]
+- [lmc999](https://github.com/lmc999)
+- [柠檬 LemonBench](https://t.me/ilemonrain)
