@@ -113,7 +113,9 @@ function MediaUnlockTest_BahamutAnime() {
         echo -n -e "\r Bahamut Anime:\t\t\t\t${Font_Red}Failed (Network Connection)${Font_Suffix}\n" && echo -e " Bahamut Anime:\t\t\t\tFailed (Network Connection)" >> ${LOG_FILE};
         return;
     fi
+    
     local result="$(PharseJSON "$tmpresult" "animeSn")";
+    
     if [ "$result" != "null" ]; then
         resultverify="$(echo $result | grep -oE '[0-9]{1,}')";
         if [ "$?" = "0" ]; then
@@ -142,22 +144,28 @@ function MediaUnlockTest_BilibiliChinaMainland() {
     local randsession="$(cat /dev/urandom | head -n 32 | md5sum | head -c 32)";
     # 尝试获取成功的结果
     local result=`curl --user-agent "${UA_Browser}" -${1} -fsSL --max-time 30 "https://api.bilibili.com/pgc/player/web/playurl?avid=82846771&qn=0&type=&otype=json&ep_id=307247&fourk=1&fnver=0&fnval=16&session=${randsession}&module=bangumi" 2>&1`;
-    if [[ "$result" != "curl"* ]]; then
-        local result="$(PharseJSON "${result}" "code")";
-        if [ "$?" = "0" ]; then
-            if [ "${result}" = "0" ]; then
-                echo -n -e "\r BiliBili China Mainland Only:\t\t${Font_Green}Yes${Font_Suffix}\n" && echo -e " BiliBili China Mainland Only:\t\tYes" >> ${LOG_FILE};
-                elif [ "${result}" = "-10403" ]; then
-                echo -n -e "\r BiliBili China Mainland Only:\t\t${Font_Red}No${Font_Suffix}\n" && echo -e " BiliBili China Mainland Only:\t\tNo" >> ${LOG_FILE};
-            else
-                echo -n -e "\r BiliBili China Mainland Only:\t\t${Font_Red}Failed${Font_Suffix} ${Font_SkyBlue}(${result})${Font_Suffix}\n" && echo -e " BiliBili China Mainland Only:\t\tFailed (${result})" >> ${LOG_FILE};
-            fi
-        else
-            echo -n -e "\r BiliBili China Mainland Only:\t\t${Font_Red}Failed (Parse Json)${Font_Suffix}\n" && echo -e " BiliBili China Mainland Only:\t\tFailed (Parse Json)" >> ${LOG_FILE};
-        fi
-    else
+    if [[ "$result" == "curl"* ]]; then
         echo -n -e "\r BiliBili China Mainland Only:\t\t${Font_Red}Failed (Network Connection)${Font_Suffix}\n" && echo -e " BiliBili China Mainland Only:\t\tFailed (Network Connection)" >> ${LOG_FILE};
+        return;
     fi
+    
+    local result="$(PharseJSON "${result}" "code")";
+    if [ "$?" -ne "0" ]; then
+        echo -n -e "\r BiliBili China Mainland Only:\t\t${Font_Red}Failed (Parse Json)${Font_Suffix}\n" && echo -e " BiliBili China Mainland Only:\t\tFailed (Parse Json)" >> ${LOG_FILE};
+        return;
+    fi
+    
+    case ${result} in
+        0)
+            echo -n -e "\r BiliBili China Mainland Only:\t\t${Font_Green}Yes${Font_Suffix}\n" && echo -e " BiliBili China Mainland Only:\t\tYes" >> ${LOG_FILE};
+        ;;
+        -10403)
+            echo -n -e "\r BiliBili China Mainland Only:\t\t${Font_Red}No${Font_Suffix}\n" && echo -e " BiliBili China Mainland Only:\t\tNo" >> ${LOG_FILE};
+        ;;
+        *)
+            echo -n -e "\r BiliBili China Mainland Only:\t\t${Font_Red}Failed${Font_Suffix} ${Font_SkyBlue}(${result})${Font_Suffix}\n" && echo -e " BiliBili China Mainland Only:\t\tFailed (${result})" >> ${LOG_FILE};
+        ;;
+    esac
 }
 
 # 流媒体解锁测试-哔哩哔哩港澳台限定
@@ -166,22 +174,27 @@ function MediaUnlockTest_BilibiliHKMCTW() {
     local randsession="$(cat /dev/urandom | head -n 32 | md5sum | head -c 32)";
     # 尝试获取成功的结果
     local result=`curl --user-agent "${UA_Browser}" -${1} -fsSL --max-time 30 "https://api.bilibili.com/pgc/player/web/playurl?avid=18281381&cid=29892777&qn=0&type=&otype=json&ep_id=183799&fourk=1&fnver=0&fnval=16&session=${randsession}&module=bangumi" 2>&1`;
-    if [[ "$result" != "curl"* ]]; then
-        local result="$(PharseJSON "${result}" "code")";
-        if [ "$?" = "0" ]; then
-            if [ "${result}" = "0" ]; then
-                echo -n -e "\r BiliBili Hongkong/Macau/Taiwan:\t${Font_Green}Yes${Font_Suffix}\n" && echo -e " BiliBili Hongkong/Macau/Taiwan:\tYes" >> ${LOG_FILE};
-                elif [ "${result}" = "-10403" ]; then
-                echo -n -e "\r BiliBili Hongkong/Macau/Taiwan:\t${Font_Red}No${Font_Suffix}\n" && echo -e " BiliBili Hongkong/Macau/Taiwan:\tNo" >> ${LOG_FILE};
-            else
-                echo -n -e "\r BiliBili Hongkong/Macau/Taiwan:\t${Font_Red}Failed${Font_Suffix} ${Font_SkyBlue}(${result})${Font_Suffix}\n" && echo -e " BiliBili Hongkong/Macau/Taiwan:\tFailed (${result})" >> ${LOG_FILE};
-            fi
-        else
-            echo -n -e "\r BiliBili Hongkong/Macau/Taiwan:\t${Font_Red}Failed (Parse Json)${Font_Suffix}\n" && echo -e " BiliBili Hongkong/Macau/Taiwan:\tFailed (Parse Json)" >> ${LOG_FILE};
-        fi
-    else
+    if [[ "$result" == "curl"* ]]; then
         echo -n -e "\r BiliBili Hongkong/Macau/Taiwan:\t${Font_Red}Failed (Network Connection)${Font_Suffix}\n" && echo -e " BiliBili Hongkong/Macau/Taiwan:\tFailed (Network Connection)" >> ${LOG_FILE};
+        return
     fi
+    
+    local result="$(PharseJSON "${result}" "code")";
+    if [ "$?" -ne "0" ]; then
+        echo -n -e "\r BiliBili Hongkong/Macau/Taiwan:\t${Font_Red}Failed (Parse Json)${Font_Suffix}\n" && echo -e " BiliBili Hongkong/Macau/Taiwan:\tFailed (Parse Json)" >> ${LOG_FILE};
+        return;
+    fi
+    case ${result} in
+        0)
+            echo -n -e "\r BiliBili Hongkong/Macau/Taiwan:\t${Font_Green}Yes${Font_Suffix}\n" && echo -e " BiliBili Hongkong/Macau/Taiwan:\tYes" >> ${LOG_FILE};
+        ;;
+        -10403)
+            echo -n -e "\r BiliBili Hongkong/Macau/Taiwan:\t${Font_Red}No${Font_Suffix}\n" && echo -e " BiliBili Hongkong/Macau/Taiwan:\tNo" >> ${LOG_FILE};
+        ;;
+        *)
+            echo -n -e "\r BiliBili Hongkong/Macau/Taiwan:\t${Font_Red}Failed${Font_Suffix} ${Font_SkyBlue}(${result})${Font_Suffix}\n" && echo -e " BiliBili Hongkong/Macau/Taiwan:\tFailed (${result})" >> ${LOG_FILE};
+        ;;
+    esac
 }
 
 # 流媒体解锁测试-哔哩哔哩台湾限定
@@ -190,22 +203,28 @@ function MediaUnlockTest_BilibiliTW() {
     local randsession="$(cat /dev/urandom | head -n 32 | md5sum | head -c 32)";
     # 尝试获取成功的结果
     local result=`curl --user-agent "${UA_Browser}" -${1} -fsSL --max-time 30 "https://api.bilibili.com/pgc/player/web/playurl?avid=50762638&cid=100279344&qn=0&type=&otype=json&ep_id=268176&fourk=1&fnver=0&fnval=16&session=${randsession}&module=bangumi" 2>&1`;
-    if [[ "$result" != "curl"* ]]; then
-        local result="$(PharseJSON "${result}" "code")";
-        if [ "$?" = "0" ]; then
-            if [ "${result}" = "0" ]; then
-                echo -n -e "\r Bilibili Taiwan Only:\t\t\t${Font_Green}Yes${Font_Suffix}\n" && echo -e " Bilibili Taiwan Only:\t\t\tYes" >> ${LOG_FILE};
-                elif [ "${result}" = "-10403" ]; then
-                echo -n -e "\r Bilibili Taiwan Only:\t\t\t${Font_Red}No${Font_Suffix}\n" && echo -e " Bilibili Taiwan Only:\t\t\tNo" >> ${LOG_FILE};
-            else
-                echo -n -e "\r Bilibili Taiwan Only:\t\t\t${Font_Red}Failed${Font_Suffix} ${Font_SkyBlue}(${result})${Font_Suffix}\n" && echo " Bilibili Taiwan Only:Failed (${result})" >> ${LOG_FILE};
-            fi
-        else
-            echo -n -e "\r Bilibili Taiwan Only:\t\t\t${Font_Red}Failed (Parse Json)${Font_Suffix}\n" && echo -e " Bilibili Taiwan Only:Failed (Parse Json)" >> ${LOG_FILE};
-        fi
-    else
+    if [[ "$result" == "curl"* ]]; then
         echo -n -e "\r Bilibili Taiwan Only:\t\t\t${Font_Red}Failed (Network Connection)${Font_Suffix}\n" && echo -e " Bilibili Taiwan Only:Failed (Network Connection)" >> ${LOG_FILE};
+        return;
     fi
+    
+    local result="$(PharseJSON "${result}" "code")";
+    if [ "$?" -ne "0" ]; then
+        echo -n -e "\r Bilibili Taiwan Only:\t\t\t${Font_Red}Failed (Parse Json)${Font_Suffix}\n" && echo -e " Bilibili Taiwan Only:Failed (Parse Json)" >> ${LOG_FILE};
+        return;
+    fi
+    
+    case ${result} in
+        0)
+            echo -n -e "\r Bilibili Taiwan Only:\t\t\t${Font_Green}Yes${Font_Suffix}\n" && echo -e " Bilibili Taiwan Only:\t\t\tYes" >> ${LOG_FILE};
+        ;;
+        -10403)
+            echo -n -e "\r Bilibili Taiwan Only:\t\t\t${Font_Red}No${Font_Suffix}\n" && echo -e " Bilibili Taiwan Only:\t\t\tNo" >> ${LOG_FILE};
+        ;;
+        *)
+            echo -n -e "\r Bilibili Taiwan Only:\t\t\t${Font_Red}Failed (${result})${Font_Suffix}\n" && echo " Bilibili Taiwan Only:Failed (${result})" >> ${LOG_FILE};
+        ;;
+    esac
 }
 
 # 流媒体解锁测试-Abema.TV
@@ -213,67 +232,81 @@ function MediaUnlockTest_BilibiliTW() {
 function MediaUnlockTest_AbemaTV_IPTest() {
     echo -n -e " Abema.TV:\t\t\t\t->\c";
     #
-    local result=$(curl --user-agent "${UA_Dalvik}" -${1} -fsL --write-out %{http_code} --max-time 30 "https://api.abema.io/v1/ip/check?device=android" 2>&1);
+    local result=`curl --user-agent "${UA_Dalvik}" -${1} -fsL --write-out %{http_code} --max-time 30 "https://api.abema.io/v1/ip/check?device=android" 2>&1`;
     if [[ "${result}" == "000" ]]; then
         echo -n -e "\r Abema.TV:\t\t\t\t${Font_Red}Failed (Network Connection)${Font_Suffix}\n" && echo -e " Abema.TV:\t\t\t\tFailed (Network Connection)" >> ${LOG_FILE};
         return;
     fi
     
-    local result=$(curl --user-agent "${UA_Dalvik}" -${1} -fsL --max-time 30 "https://api.abema.io/v1/ip/check?device=android" | python -m json.tool 2> /dev/null | grep isoCountryCode | awk '{print $2}' | cut -f2 -d'"')
-    local result="$(PharseJSON "${result}" "cdnRegionUrl")";
-    local result=$(echo ${result} | awk '{print $2}' | cut -f2 -d'"')
-    if [ -n "$result" ]; then
-        if [[ "$result" == "JP" ]]
-        then
-            echo -n -e "\r Abema.TV:\t\t\t\t${Font_Green}Yes${Font_Suffix}\n" && echo -e " Abema.TV:\t\t\t\tYes" >> ${LOG_FILE};
-        else
-            echo -n -e "\r Abema.TV:\t\t\t\t${Font_Yellow}Oversea Only${Font_Suffix}\n" && echo -e " Abema.TV:\t\t\t\tOversea Only" >> ${LOG_FILE};
-        fi
-    else
+    local result=`curl --user-agent "${UA_Dalvik}" -${1} -fsL --max-time 30 "https://api.abema.io/v1/ip/check?device=android" 2>&1`;
+    local result=$(PharseJSON "${result}" "isoCountryCode");
+    if [ ! -n "$result" ]; then
         echo -n -e "\r Abema.TV:\t\t\t\t${Font_Red}No${Font_Suffix}\n" && echo -e " Abema.TV:\t\t\t\tNo" >> ${LOG_FILE};
+        return;
     fi
+    
+    if [[ "${result}" == "JP" ]];then
+        echo -n -e "\r Abema.TV:\t\t\t\t${Font_Green}Yes${Font_Suffix}\n" && echo -e " Abema.TV:\t\t\t\tYes" >> ${LOG_FILE};
+        return;
+    fi
+    echo -n -e "\r Abema.TV:\t\t\t\t${Font_Yellow}Oversea Only${Font_Suffix}\n" && echo -e " Abema.TV:\t\t\t\tOversea Only" >> ${LOG_FILE};
 }
 
 function MediaUnlockTest_PCRJP() {
     echo -n -e " Princess Connect Re:Dive Japan:\t->\c";
-    local result=`curl --user-agent "${UA_Dalvik}" -${1} -fsL --write-out %{http_code} --output /dev/null --max-time 30 https://api-priconne-redive.cygames.jp/`;
-    if [ "$result" = "000" ]; then
-        echo -n -e "\r Princess Connect Re:Dive Japan:\t${Font_Red}Failed (Network Connection)${Font_Suffix}\n" && echo -e " Princess Connect Re:Dive Japan:\tFailed (Network Connection)" >> ${LOG_FILE};
-        elif [ "$result" = "404" ]; then
-        echo -n -e "\r Princess Connect Re:Dive Japan:\t${Font_Green}Yes${Font_Suffix}\n" && echo -e " Princess Connect Re:Dive Japan:\tYes" >> ${LOG_FILE};
-        elif [ "$result" = "403" ]; then
-        echo -n -e "\r Princess Connect Re:Dive Japan:\t${Font_Red}No${Font_Suffix}\n" && echo -e " Princess Connect Re:Dive Japan:\tNo" >> ${LOG_FILE};
-    else
-        echo -n -e "\r Princess Connect Re:Dive Japan:\t${Font_Red}Failed (Unexpected Result: $result)${Font_Suffix}\n" && echo -e " Princess Connect Re:Dive Japan:\tFailed (Unexpected Result: $result)" >> ${LOG_FILE};
-    fi
+    local result=`curl --user-agent "${UA_Dalvik}" -${1} -fsL --write-out %{http_code} --output /dev/null --max-time 30 https://api-priconne-redive.cygames.jp/ 2>&1`;
+    case $result in
+        000)
+            echo -n -e "\r Princess Connect Re:Dive Japan:\t${Font_Red}Failed (Network Connection)${Font_Suffix}\n" && echo -e " Princess Connect Re:Dive Japan:\tFailed (Network Connection)" >> ${LOG_FILE};
+        ;;
+        404)
+            echo -n -e "\r Princess Connect Re:Dive Japan:\t${Font_Green}Yes${Font_Suffix}\n" && echo -e " Princess Connect Re:Dive Japan:\tYes" >> ${LOG_FILE};
+        ;;
+        403)
+            echo -n -e "\r Princess Connect Re:Dive Japan:\t${Font_Red}No${Font_Suffix}\n" && echo -e " Princess Connect Re:Dive Japan:\tNo" >> ${LOG_FILE};
+        ;;
+        *)
+            echo -n -e "\r Princess Connect Re:Dive Japan:\t${Font_Red}Failed (Unexpected Result: $result)${Font_Suffix}\n" && echo -e " Princess Connect Re:Dive Japan:\tFailed (Unexpected Result: $result)" >> ${LOG_FILE};
+        ;;
+    esac
 }
 
 function MediaUnlockTest_UMAJP() {
     echo -n -e " Pretty Derby Japan:\t\t\t->\c";
     local result=`curl --user-agent "${UA_Dalvik}" -${1} -fsL --write-out %{http_code} --output /dev/null --max-time 30 https://api-umamusume.cygames.jp/`;
-    if [ "$result" = "000" ]; then
-        echo -n -e "\r Pretty Derby Japan:\t\t\t${Font_Red}Failed (Network Connection)${Font_Suffix}\n" && echo -e "Pretty Derby Japan:\t\t\tFailed (Network Connection)" >> ${LOG_FILE};
-        elif [ "$result" = "404" ]; then
-        echo -n -e "\r Pretty Derby Japan:\t\t\t${Font_Green}Yes${Font_Suffix}\n" && echo -e "Pretty Derby Japan:\t\t\tYes" >> ${LOG_FILE};
-        elif [ "$result" = "403" ]; then
-        echo -n -e "\r Pretty Derby Japan:\t\t\t${Font_Red}No${Font_Suffix}\n" && echo -e "Pretty Derby Japan:\t\t\tNo" >> ${LOG_FILE};
-    else
-        echo -n -e "\r Pretty Derby Japan:\t\t\t${Font_Red}Failed (Unexpected Result: $result)${Font_Suffix}\n" && echo -e "Pretty Derby Japan:\t\t\tFailed (Unexpected Result: $result)" >> ${LOG_FILE};
-    fi
+    case ${result} in
+        000)
+            echo -n -e "\r Pretty Derby Japan:\t\t\t${Font_Red}Failed (Network Connection)${Font_Suffix}\n" && echo -e "Pretty Derby Japan:\t\t\tFailed (Network Connection)" >> ${LOG_FILE};
+        ;;
+        404)
+            echo -n -e "\r Pretty Derby Japan:\t\t\t${Font_Green}Yes${Font_Suffix}\n" && echo -e "Pretty Derby Japan:\t\t\tYes" >> ${LOG_FILE};
+        ;;
+        403)
+            echo -n -e "\r Pretty Derby Japan:\t\t\t${Font_Red}No${Font_Suffix}\n" && echo -e "Pretty Derby Japan:\t\t\tNo" >> ${LOG_FILE};
+        ;;
+        *)
+            echo -n -e "\r Pretty Derby Japan:\t\t\t${Font_Red}Failed (Unexpected Result: $result)${Font_Suffix}\n" && echo -e "Pretty Derby Japan:\t\t\tFailed (Unexpected Result: $result)" >> ${LOG_FILE};
+        ;;
+    esac
 }
 
 function MediaUnlockTest_Kancolle() {
     echo -n -e " Kancolle Japan:\t\t\t->\c";
     local result=`curl --user-agent "${UA_Dalvik}" -${1} -fsL --write-out %{http_code} --output /dev/null --max-time 30 http://203.104.209.7/kcscontents/`;
-    if [ "$result" = "000" ]; then
-        echo -n -e "\r Kancolle Japan:\t\t\t${Font_Red}Failed (Network Connection)${Font_Suffix}\n" && echo -e " Kancolle Japan:\t\t\tFailed (Network Connection)" >> ${LOG_FILE};
-        elif [ "$result" = "200" ]; then
-        echo -n -e "\r Kancolle Japan:\t\t\t${Font_Green}Yes${Font_Suffix}\n" && echo -e " Kancolle Japan:\t\t\tYes" >> ${LOG_FILE};
-        elif [ "$result" = "403" ]; then
-        echo -n -e "\r Kancolle Japan:\t\t\t${Font_Red}No${Font_Suffix}\n" && echo -e " Kancolle Japan:\t\t\tNo" >> ${LOG_FILE};
-    else
-        echo -n -e "\r Kancolle Japan:\t\t\t${Font_Red}Failed (Unexpected Result: $result)${Font_Suffix}\n" && echo -e " Kancolle Japan:\t\t\tFailed (Unexpected Result: $result)" >> ${LOG_FILE};
-    fi
+    case ${result} in
+        000)
+            echo -n -e "\r Kancolle Japan:\t\t\t${Font_Red}Failed (Network Connection)${Font_Suffix}\n" && echo -e " Kancolle Japan:\t\t\tFailed (Network Connection)" >> ${LOG_FILE};
+        ;;
+        200)
+            echo -n -e "\r Kancolle Japan:\t\t\t${Font_Green}Yes${Font_Suffix}\n" && echo -e " Kancolle Japan:\t\t\tYes" >> ${LOG_FILE};
+        ;;
+        403)
+            echo -n -e "\r Kancolle Japan:\t\t\t${Font_Red}No${Font_Suffix}\n" && echo -e " Kancolle Japan:\t\t\tNo" >> ${LOG_FILE};
+        ;;
+        *)
+            echo -n -e "\r Kancolle Japan:\t\t\t${Font_Red}Failed (Unexpected Result: $result)${Font_Suffix}\n" && echo -e " Kancolle Japan:\t\t\tFailed (Unexpected Result: $result)" >> ${LOG_FILE};
+        ;;
+    esac
 }
 
 function MediaUnlockTest_BBC() {
@@ -358,20 +391,25 @@ function MediaUnlockTest_DisneyPlus() {
         return;
     fi
     
-    local previewcheck=$(curl -s -o /dev/null -L --max-time 30 -w '%{url_effective}\n' "https://disneyplus.com" | grep preview)
-    if [ -n "$previewcheck" ];then
+    local previewcheck=`curl -s -o /dev/null -L --max-time 30 -w '%{url_effective}\n' "https://disneyplus.com" 2>&1`;
+    if [[ "${previewcheck}" == "curl"* ]];then
+        echo -n -e "\r DisneyPlus:\t\t\t\t${Font_Red}Failed (Network Connection)${Font_Suffix}\n" && echo -e " DisneyPlus:\t\t\t\tFailed (Network Connection)" >> ${LOG_FILE};
+        return;
+    fi
+    
+    if [[ "${previewcheck}" != *"preview"* ]];then
         echo -n -e "\r DisneyPlus:\t\t\t\t${Font_Red}No${Font_Suffix}\n" && echo -e " DisneyPlus:\t\t\t\tNo" >> ${LOG_FILE};
         return;
     fi
     
-    local result=$(curl -${1} --user-agent "${UA_Browser}" -fs --write-out '%{redirect_url}\n' --output /dev/null "https://www.disneyplus.com")
+    local result=`curl -${1} --user-agent "${UA_Browser}" -fs --write-out '%{redirect_url}\n' --output /dev/null "https://www.disneyplus.com" 2>&1`;
     if [[ "${website}" == "https://disneyplus.disney.co.jp/" ]];then
         echo -n -e "\r DisneyPlus:\t\t\t\t${Font_Green}Yes(Region: JP)${Font_Suffix}\n" && echo -e " DisneyPlus:\t\t\t\tYes(Region: JP)" >> ${LOG_FILE};
         return;
     fi
     
-    local result=$(curl -${1} -s --user-agent "$UA_Browser" -H "Content-Type: application/x-www-form-urlencoded" -H "${DisneyHeader}" -d "${DisneyAuth}" -X POST  "https://global.edge.bamgrid.com/token")
-    PharseJSON "${result}" "access_token" > /dev/null
+    local result=`curl -${1} -s --user-agent "$UA_Browser" -H "Content-Type: application/x-www-form-urlencoded" -H "${DisneyHeader}" -d "${DisneyAuth}" -X POST  "https://global.edge.bamgrid.com/token" 2>&1`;
+    PharseJSON "${result}" "access_token" 2>&1 > /dev/null;
     if [[ "$?" -eq 0 ]]; then
         local region=$(curl -${1} -s https://www.disneyplus.com | grep 'region: ' | awk '{print $2}')
         if [ -n "$region" ];then
@@ -386,13 +424,13 @@ function MediaUnlockTest_DisneyPlus() {
 
 function MediaUnlockTest_Dazn() {
     echo -n -e " Dazn:\t\t\t\t\t->\c";
-    local result=$(curl -${1} -s --max-time 30 -X POST -H "Content-Type: application/json" -d '{"LandingPageKey":"generic","Languages":"zh-CN,zh,en","Platform":"web","PlatformAttributes":{},"Manufacturer":"","PromoCode":"","Version":"2"}' "https://startup.core.indazn.com/misl/v5/Startup")
+    local result=`curl -${1} -s --max-time 30 -X POST -H "Content-Type: application/json" -d '{"LandingPageKey":"generic","Languages":"zh-CN,zh,en","Platform":"web","PlatformAttributes":{},"Manufacturer":"","PromoCode":"","Version":"2"}' "https://startup.core.indazn.com/misl/v5/Startup" 2>&1`;
     if [[ "$result" == "curl"* ]];then
         echo -n -e "\r Dazn:\t\t\t\t${Font_Red}Failed (Network Connection)${Font_Suffix}\n" && echo -e " Dazn:\t\t\t\tFailed (Network Connection)" >> ${LOG_FILE};
         return;
     fi
     
-    local result=$(PharseJSON "${result}" "GeolocatedCountry" | awk '{print $2}' | cut -f2 -d'"');
+    local result=$(PharseJSON "${result}" "GeolocatedCountry");
     if [ -n "${result}" ]; then
         echo -n -e "\r Dazn:\t\t\t\t\t${Font_Red}Unsupport${Font_Suffix}\n" && echo -e " Dazn:\t\t\t\tUnsupport" >> ${LOG_FILE};
         return;
@@ -407,7 +445,7 @@ function MediaUnlockTest_Dazn() {
 
 function MediaUnlockTest_HuluJP() {
     echo -n -e " Hulu Japan:\t\t\t\t->\c";
-    local result=$(curl -${1} -s -o /dev/null -L --max-time 30 -w '%{url_effective}\n' "https://id.hulu.jp");
+    local result=`curl -${1} -s -o /dev/null -L --max-time 30 -w '%{url_effective}\n' "https://id.hulu.jp" 2>&1`;
     if [[ "$result" == "curl"* ]];then
         echo -n -e "\r Hulu Japan:\t\t\t\t${Font_Red}Failed (Network Connection)${Font_Suffix}\n" && echo -e " Hulu Japan:\t\t\t\tFailed (Network Connection)" >> ${LOG_FILE};
         return;
@@ -438,28 +476,29 @@ function MediaUnlockTest_MyTVSuper() {
 
 function MediaUnlockTest_NowE() {
     echo -n -e " Now E:\t\t\t\t\t->\c";
-    local result=$(curl -${1} -sSLk --max-time 30 -X POST -H "Content-Type: application/json" -d '{"contentId":"202105121370235","contentType":"Vod","pin":"","deviceId":"W-60b8d30a-9294-d251-617b-c12f9d0c","deviceType":"WEB"}' "https://webtvapi.nowe.com/16/1/getVodURL");
+    local result=`curl -${1} -sSLk --max-time 30 -X POST -H "Content-Type: application/json" -d '{"contentId":"202105121370235","contentType":"Vod","pin":"","deviceId":"W-60b8d30a-9294-d251-617b-c12f9d0c","deviceType":"WEB"}' "https://webtvapi.nowe.com/16/1/getVodURL" 2>&1`;
     if [[ "${result}" == "curl"* ]];then
         echo -n -e "\r Now E:\t\t\t\t\t${Font_Red}Failed (Network Connection)${Font_Suffix}\n" && echo -e " Now E:\t\t\t\t\tFailed (Network Connection)" >> ${LOG_FILE};
         return;
     fi
     
     local result=$(PharseJSON "${result}" "responseCode");
-    if [[ "$result" == "SUCCESS" ]]; then
-        echo -n -e "\r Now E:\t\t\t\t\t${Font_Green}Yes${Font_Suffix}\n" && echo -e " Now E:\t\t\t\t\tYes" >> ${LOG_FILE};
-        return;
-    fi
-    
-    if [[ "$result" == "GEO_CHECK_FAIL" ]]; then
-        echo -n -e "\r Now E:\t\t\t\t\t${Font_Red}No${Font_Suffix}\n" && echo -e " Now E:\t\t\t\t\tNo" >> ${LOG_FILE};
-        return;
-    fi
-    echo -n -e "\r Now E:\t\t\t\t\t${Font_Red}Failed (Unexpected Result: $result)${Font_Suffix}\n" && echo -e " Now E:\t\t\t\t\tFailed (Unexpected Result: $result)" >> ${LOG_FILE};
+    case ${result} in
+        SUCCESS)
+            echo -n -e "\r Now E:\t\t\t\t\t${Font_Green}Yes${Font_Suffix}\n" && echo -e " Now E:\t\t\t\t\tYes" >> ${LOG_FILE};
+        ;;
+        GEO_CHECK_FAIL)
+            echo -n -e "\r Now E:\t\t\t\t\t${Font_Red}No${Font_Suffix}\n" && echo -e " Now E:\t\t\t\t\tNo" >> ${LOG_FILE};
+        ;;
+        *)
+            echo -n -e "\r Now E:\t\t\t\t\t${Font_Red}Failed (Unexpected Result: $result)${Font_Suffix}\n" && echo -e " Now E:\t\t\t\t\tFailed (Unexpected Result: $result)" >> ${LOG_FILE};
+        ;;
+    esac
 }
 
 function MediaUnlockTest_ViuTV() {
     echo -n -e " Viu TV:\t\t\t\t->\c";
-    local result=$(curl -${1} -sSLk --max-time 30 -X POST -H "Content-Type: application/json" -d '{"callerReferenceNo":"20210603233037","productId":"202009041154906","contentId":"202009041154906","contentType":"Vod","mode":"prod","PIN":"password","cookie":"3c2c4eafe3b0d644b8","deviceId":"U5f1bf2bd8ff2ee000","deviceType":"ANDROID_WEB","format":"HLS"}' "https://api.viu.now.com/p8/3/getVodURL");
+    local result=`curl -${1} -sSLk --max-time 30 -X POST -H "Content-Type: application/json" -d '{"callerReferenceNo":"20210603233037","productId":"202009041154906","contentId":"202009041154906","contentType":"Vod","mode":"prod","PIN":"password","cookie":"3c2c4eafe3b0d644b8","deviceId":"U5f1bf2bd8ff2ee000","deviceType":"ANDROID_WEB","format":"HLS"}' "https://api.viu.now.com/p8/3/getVodURL" 2>&1`;
     if [[ "${result}" == "curl"* ]];then
         echo -n -e "\r Viu TV:\t\t\t\t${Font_Red}Failed (Network Connection)${Font_Suffix}\n" && echo -e " Viu TV:\t\t\t\tFailed (Network Connection)" >> ${LOG_FILE};
         return;
@@ -481,7 +520,7 @@ function MediaUnlockTest_ViuTV() {
 
 function MediaUnlockTest_UNext() {
     echo -n -e " U Next:\t\t\t\t->\c";
-    local result=$(curl -${1} -sSL --max-time 30 "https://video-api.unext.jp/api/1/player?entity%5B%5D=playlist_url&episode_code=ED00148814&title_code=SID0028118&keyonly_flg=0&play_mode=caption&bitrate_low=1500");
+    local result=`curl -${1} -sSL --max-time 30 "https://video-api.unext.jp/api/1/player?entity%5B%5D=playlist_url&episode_code=ED00148814&title_code=SID0028118&keyonly_flg=0&play_mode=caption&bitrate_low=1500" 2>&1`;
     if [[ "${result}" == "curl"* ]];then
         echo -n -e "\r U Next:\t\t\t\t${Font_Red}Failed (Network Connection)${Font_Suffix}\n" && echo -e " U Next:\t\t\t\tFailed (Network Connection)" >> ${LOG_FILE};
         return;
@@ -502,7 +541,7 @@ function MediaUnlockTest_UNext() {
 
 function MediaUnlockTest_Paravi() {
     echo -n -e " Paravi:\t\t\t\t->\c";
-    local result=$(curl -${1} -sSL --max-time 30 -H "Content-Type: application/json" -d '{"meta_id":71885,"vuid":"3b64a775a4e38d90cc43ea4c7214702b","device_code":1,"app_id":1}' "https://api.paravi.jp/api/v1/playback/auth");
+    local result=·curl -${1} -sSL --max-time 30 -H "Content-Type: application/json" -d '{"meta_id":71885,"vuid":"3b64a775a4e38d90cc43ea4c7214702b","device_code":1,"app_id":1}' "https://api.paravi.jp/api/v1/playback/auth" 2>&1`;
     if [[ "$result" == "curl"* ]];then
         echo -n -e "\r Paravi:\t\t\t\t${Font_Red}Failed (Network Connection)${Font_Suffix}\n" && echo -e " Paravi:\t\t\t\tFailed (Network Connection)" >> ${LOG_FILE};
         return;
@@ -522,9 +561,9 @@ function MediaUnlockTest_Paravi() {
 }
 
 function ISP(){
-    local ip=$(curl -sSL -${1} "https://ip.sb");
-    local result=$(curl -sSL -${1} "https://api.ip.sb/geoip/${local_ipv4}");
-    local isp=$(PharseJSON "${result}" "isp");
+    local ip=`curl -sSL -${1} "https://ip.sb" 2>&1`;
+    local result=`curl -sSL -${1} "https://api.ip.sb/geoip/${local_ipv4}"  2>&1`;
+    local isp=$(PharseJSON "${result}" "isp" 2>&1);
     if [ $? -eq 0 ];then
         echo -e " ** ISP: ${isp}" && echo -e " ** ISP: ${isp}" >> ${LOG_FILE};
     fi
