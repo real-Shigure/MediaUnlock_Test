@@ -371,7 +371,7 @@ function MediaUnlockTest_DisneyPlus() {
     fi
     
     local result=$(curl -${1} -s --user-agent "$UA_Browser" -H "Content-Type: application/x-www-form-urlencoded" -H "${DisneyHeader}" -d "${DisneyAuth}" -X POST  "https://global.edge.bamgrid.com/token")
-    PharseJSON "${result}" "access_token"
+    PharseJSON "${result}" "access_token" > /dev/null
     if [[ "$?" -eq 0 ]]; then
         local region=$(curl -${1} -s https://www.disneyplus.com | grep 'region: ' | awk '{print $2}')
         if [ -n "$region" ];then
@@ -438,7 +438,7 @@ function MediaUnlockTest_MyTVSuper() {
 
 function MediaUnlockTest_NowE() {
     echo -n -e " Now E:\t\t\t\t\t->\c";
-    local result=$(curl -${1} -k --ciphers DEFAULT@SECLEVEL=1 -s --max-time 30 -X POST -H "Content-Type: application/json" -d '{"contentId":"202105121370235","contentType":"Vod","pin":"","deviceId":"W-60b8d30a-9294-d251-617b-c12f9d0c","deviceType":"WEB"}' "https://webtvapi.nowe.com/16/1/getVodURL");
+    local result=$(curl -${1} -sSLk --max-time 30 -X POST -H "Content-Type: application/json" -d '{"contentId":"202105121370235","contentType":"Vod","pin":"","deviceId":"W-60b8d30a-9294-d251-617b-c12f9d0c","deviceType":"WEB"}' "https://webtvapi.nowe.com/16/1/getVodURL");
     if [[ "${result}" == "curl"* ]];then
         echo -n -e "\r Now E:\t\t\t\t\t${Font_Red}Failed (Network Connection)${Font_Suffix}\n" && echo -e " Now E:\t\t\t\t\tFailed (Network Connection)" >> ${LOG_FILE};
         return;
@@ -459,7 +459,7 @@ function MediaUnlockTest_NowE() {
 
 function MediaUnlockTest_ViuTV() {
     echo -n -e " Viu TV:\t\t\t\t->\c";
-    local result=$(curl -${1} -k --ciphers DEFAULT@SECLEVEL=1 -s --max-time 30 -X POST -H "Content-Type: application/json" -d '{"callerReferenceNo":"20210603233037","productId":"202009041154906","contentId":"202009041154906","contentType":"Vod","mode":"prod","PIN":"password","cookie":"3c2c4eafe3b0d644b8","deviceId":"U5f1bf2bd8ff2ee000","deviceType":"ANDROID_WEB","format":"HLS"}' "https://api.viu.now.com/p8/3/getVodURL");
+    local result=$(curl -${1} -sSLk --max-time 30 -X POST -H "Content-Type: application/json" -d '{"callerReferenceNo":"20210603233037","productId":"202009041154906","contentId":"202009041154906","contentType":"Vod","mode":"prod","PIN":"password","cookie":"3c2c4eafe3b0d644b8","deviceId":"U5f1bf2bd8ff2ee000","deviceType":"ANDROID_WEB","format":"HLS"}' "https://api.viu.now.com/p8/3/getVodURL");
     if [[ "${result}" == "curl"* ]];then
         echo -n -e "\r Viu TV:\t\t\t\t${Font_Red}Failed (Network Connection)${Font_Suffix}\n" && echo -e " Viu TV:\t\t\t\tFailed (Network Connection)" >> ${LOG_FILE};
         return;
@@ -481,34 +481,34 @@ function MediaUnlockTest_ViuTV() {
 
 function MediaUnlockTest_UNext() {
     echo -n -e " U Next:\t\t\t\t->\c";
-    local result=$(curl -${1} -s --max-time 30 "https://video-api.unext.jp/api/1/player?entity%5B%5D=playlist_url&episode_code=ED00148814&title_code=SID0028118&keyonly_flg=0&play_mode=caption&bitrate_low=1500");
+    local result=$(curl -${1} -sSL --max-time 30 "https://video-api.unext.jp/api/1/player?entity%5B%5D=playlist_url&episode_code=ED00148814&title_code=SID0028118&keyonly_flg=0&play_mode=caption&bitrate_low=1500");
     if [[ "${result}" == "curl"* ]];then
         echo -n -e "\r U Next:\t\t\t\t${Font_Red}Failed (Network Connection)${Font_Suffix}\n" && echo -e " U Next:\t\t\t\tFailed (Network Connection)" >> ${LOG_FILE};
         return;
     fi
     
-    local result=$(PharseJSON "${result}" "result_status" | awk '{print $2}' | cut -d ',' -f1);
+    local result=$(PharseJSON "${result}" "data.entities_data.playlist_url.result_status");
     if [[ "${result}" == "475" || "${result}" == "200" ]]; then
         echo -n -e "\r U Next:\t\t\t\t${Font_Green}Yes${Font_Suffix}\n" && echo -e " U Next:\t\t\t\tYes" >> ${LOG_FILE};
         return;
     fi
-    
+
     if [[ "${result}" == "467" ]]; then
         echo -n -e "\r U Next:\t\t\t\t${Font_Red}No${Font_Suffix}\n" && echo -e " U Next:\t\t\t\tNo" >> ${LOG_FILE};
         return;
     fi
-    echo -n -e "\r U Next:\t\t\t\t${Font_Red}Failed (Unexpected Result: $result)${Font_Suffix}\n" && echo -e " U Next:\t\t\t\tFailed (Unexpected Result: $result)" >> ${LOG_FILE};
+    echo -n -e "\r U Next:\t\t\t\t${Font_Red}Failed (Unexpected Result: ${result})${Font_Suffix}\n" && echo -e " U Next:\t\t\t\tFailed (Unexpected Result: ${result})" >> ${LOG_FILE};
 }
 
 function MediaUnlockTest_Paravi() {
     echo -n -e " Paravi:\t\t\t\t->\c";
-    local result=$(curl -${1} -s --max-time 30 -H "Content-Type: application/json" -d '{"meta_id":71885,"vuid":"3b64a775a4e38d90cc43ea4c7214702b","device_code":1,"app_id":1}' "https://api.paravi.jp/api/v1/playback/auth");
+    local result=$(curl -${1} -sSL --max-time 30 -H "Content-Type: application/json" -d '{"meta_id":71885,"vuid":"3b64a775a4e38d90cc43ea4c7214702b","device_code":1,"app_id":1}' "https://api.paravi.jp/api/v1/playback/auth");
     if [[ "$result" == "curl"* ]];then
         echo -n -e "\r Paravi:\t\t\t\t${Font_Red}Failed (Network Connection)${Font_Suffix}\n" && echo -e " Paravi:\t\t\t\tFailed (Network Connection)" >> ${LOG_FILE};
         return;
     fi
     
-    if [[ "$(PharseJSON "${result}" "code" | awk '{print $2}' | cut -d ',' -f1)" == "2055" ]]; then
+    if [[ "$(PharseJSON "${result}" "error.code" | awk '{print $2}' | cut -d ',' -f1)" == "2055" ]]; then
         echo -n -e "\r Paravi:\t\t\t\t${Font_Red}No${Font_Suffix}\n" && echo -e " Paravi:\t\t\t\tNo" >> ${LOG_FILE};
         return;
     fi
@@ -522,9 +522,10 @@ function MediaUnlockTest_Paravi() {
 }
 
 function ISP(){
-    local ip=$(curl -s -${1} "https://ip.sb");
-    local result=$(curl -s -${1} "https://api.ip.sb/geoip/${local_ipv4}");
+    local ip=$(curl -sSL -${1} "https://ip.sb");
+    local result=$(curl -sSL -${1} "https://api.ip.sb/geoip/${local_ipv4}");
     local isp=$(PharseJSON "${result}" "isp");
+    if [[ "$0"]]
     echo -e " ** ISP: ${isp}" && echo -e " ** ISP: ${isp}" >> ${LOG_FILE};
 }
 
