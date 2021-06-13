@@ -276,16 +276,16 @@ function MediaUnlockTest_UMAJP() {
     local result=`curl --user-agent "${UA_Dalvik}" -${1} -fsL --write-out %{http_code} --output /dev/null --max-time 30 https://api-umamusume.cygames.jp/`;
     case ${result} in
         000)
-            echo -n -e "\r Pretty Derby Japan:\t\t\t${Font_Red}Failed (Network Connection)${Font_Suffix}\n" && echo -e "Pretty Derby Japan:\t\t\tFailed (Network Connection)" >> ${LOG_FILE};
+            echo -n -e "\r Pretty Derby Japan:\t\t\t${Font_Red}Failed (Network Connection)${Font_Suffix}\n" && echo -e " Pretty Derby Japan:\t\t\tFailed (Network Connection)" >> ${LOG_FILE};
         ;;
         404)
-            echo -n -e "\r Pretty Derby Japan:\t\t\t${Font_Green}Yes${Font_Suffix}\n" && echo -e "Pretty Derby Japan:\t\t\tYes" >> ${LOG_FILE};
+            echo -n -e "\r Pretty Derby Japan:\t\t\t${Font_Green}Yes${Font_Suffix}\n" && echo -e " Pretty Derby Japan:\t\t\tYes" >> ${LOG_FILE};
         ;;
         403)
-            echo -n -e "\r Pretty Derby Japan:\t\t\t${Font_Red}No${Font_Suffix}\n" && echo -e "Pretty Derby Japan:\t\t\tNo" >> ${LOG_FILE};
+            echo -n -e "\r Pretty Derby Japan:\t\t\t${Font_Red}No${Font_Suffix}\n" && echo -e " Pretty Derby Japan:\t\t\tNo" >> ${LOG_FILE};
         ;;
         *)
-            echo -n -e "\r Pretty Derby Japan:\t\t\t${Font_Red}Failed (Unexpected Result: $result)${Font_Suffix}\n" && echo -e "Pretty Derby Japan:\t\t\tFailed (Unexpected Result: $result)" >> ${LOG_FILE};
+            echo -n -e "\r Pretty Derby Japan:\t\t\t${Font_Red}Failed (Unexpected Result: $result)${Font_Suffix}\n" && echo -e " Pretty Derby Japan:\t\t\tFailed (Unexpected Result: $result)" >> ${LOG_FILE};
         ;;
     esac
 }
@@ -437,10 +437,10 @@ function MediaUnlockTest_Dazn() {
     fi
     
     if [[ "$result" == "null" ]];then
-        echo -n -e "\r Dazn:\t\t\t\t\t${Font_Red}No${Font_Suffix}\n" && echo -e " Dazn:\t\t\t\tNo" >> ${LOG_FILE}
+        echo -n -e "\r Dazn:\t\t\t\t\t${Font_Red}No${Font_Suffix}\n" && echo -e " Dazn:\t\t\t\t\tNo" >> ${LOG_FILE}
         return;
     fi
-    echo -n -e "\r Dazn:\t\t\t\t\t${Font_Green}Yes (Region: ${result})${Font_Suffix}\n" && echo -e " Dazn:\t\t\t\tYes (Region: ${result})" >> ${LOG_FILE}
+    echo -n -e "\r Dazn:\t\t\t\t\t${Font_Green}Yes (Region: ${result})${Font_Suffix}\n" && echo -e " Dazn:\t\t\t\t\tYes (Region: ${result})" >> ${LOG_FILE}
 }
 
 function MediaUnlockTest_HuluJP() {
