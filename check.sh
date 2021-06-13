@@ -391,7 +391,7 @@ function MediaUnlockTest_DisneyPlus() {
         return;
     fi
     
-    local previewcheck=`curl -s -o /dev/null -L --max-time 30 -w '%{url_effective}\n' "https://disneyplus.com" 2>&1`;
+    local previewcheck=`curl -sSL -o /dev/null -L --max-time 30 -w '%{url_effective}\n' "https://disneyplus.com" 2>&1`;
     if [[ "${previewcheck}" == "curl"* ]];then
         echo -n -e "\r DisneyPlus:\t\t\t\t${Font_Red}Failed (Network Connection)${Font_Suffix}\n" && echo -e " DisneyPlus:\t\t\t\tFailed (Network Connection)" >> ${LOG_FILE};
         return;
@@ -408,10 +408,10 @@ function MediaUnlockTest_DisneyPlus() {
         return;
     fi
     
-    local result=`curl -${1} -s --user-agent "$UA_Browser" -H "Content-Type: application/x-www-form-urlencoded" -H "${DisneyHeader}" -d "${DisneyAuth}" -X POST  "https://global.edge.bamgrid.com/token" 2>&1`;
+    local result=`curl -${1} -sSL --user-agent "$UA_Browser" -H "Content-Type: application/x-www-form-urlencoded" -H "${DisneyHeader}" -d "${DisneyAuth}" -X POST  "https://global.edge.bamgrid.com/token" 2>&1`;
     PharseJSON "${result}" "access_token" 2>&1 > /dev/null;
     if [[ "$?" -eq 0 ]]; then
-        local region=$(curl -${1} -s https://www.disneyplus.com | grep 'region: ' | awk '{print $2}')
+        local region=$(curl -${1} -sSL https://www.disneyplus.com | grep 'region: ' | awk '{print $2}')
         if [ -n "$region" ];then
             echo -n -e "\r DisneyPlus:\t\t\t\t${Font_Green}Yes(Region: $region)${Font_Suffix}\n" && echo -e " DisneyPlus:\t\t\t\tYes(Region: $region)" >> ${LOG_FILE};
             return;
@@ -424,7 +424,7 @@ function MediaUnlockTest_DisneyPlus() {
 
 function MediaUnlockTest_Dazn() {
     echo -n -e " Dazn:\t\t\t\t\t->\c";
-    local result=`curl -${1} -s --max-time 30 -X POST -H "Content-Type: application/json" -d '{"LandingPageKey":"generic","Languages":"zh-CN,zh,en","Platform":"web","PlatformAttributes":{},"Manufacturer":"","PromoCode":"","Version":"2"}' "https://startup.core.indazn.com/misl/v5/Startup" 2>&1`;
+    local result=`curl -${1} -sSL --max-time 30 -X POST -H "Content-Type: application/json" -d '{"LandingPageKey":"generic","Languages":"zh-CN,zh,en","Platform":"web","PlatformAttributes":{},"Manufacturer":"","PromoCode":"","Version":"2"}' "https://startup.core.indazn.com/misl/v5/Startup" 2>&1`;
     if [[ "$result" == "curl"* ]];then
         echo -n -e "\r Dazn:\t\t\t\t${Font_Red}Failed (Network Connection)${Font_Suffix}\n" && echo -e " Dazn:\t\t\t\tFailed (Network Connection)" >> ${LOG_FILE};
         return;
@@ -445,7 +445,7 @@ function MediaUnlockTest_Dazn() {
 
 function MediaUnlockTest_HuluJP() {
     echo -n -e " Hulu Japan:\t\t\t\t->\c";
-    local result=`curl -${1} -s -o /dev/null -L --max-time 30 -w '%{url_effective}\n' "https://id.hulu.jp" 2>&1`;
+    local result=`curl -${1} -sSL -o /dev/null --max-time 30 -w '%{url_effective}\n' "https://id.hulu.jp" 2>&1`;
     if [[ "$result" == "curl"* ]];then
         echo -n -e "\r Hulu Japan:\t\t\t\t${Font_Red}Failed (Network Connection)${Font_Suffix}\n" && echo -e " Hulu Japan:\t\t\t\tFailed (Network Connection)" >> ${LOG_FILE};
         return;
@@ -460,7 +460,7 @@ function MediaUnlockTest_HuluJP() {
 
 function MediaUnlockTest_MyTVSuper() {
     echo -n -e " MyTVSuper:\t\t\t\t->\c";
-    local result=$(curl -s -${1} --max-time 30 "https://www.mytvsuper.com/iptest.php");
+    local result=$(curl -sSL -${1} --max-time 30 "https://www.mytvsuper.com/iptest.php");
     
     if [[ "$result" == "curl"* ]];then
         echo -n -e "\r MyTVSuper:\t\t\t\t${Font_Red}Failed (Network Connection)${Font_Suffix}\n" && echo -e " MyTVSuper:\t\t\t\tFailed (Network Connection)" >> ${LOG_FILE};
