@@ -488,7 +488,7 @@ function MediaUnlockTest_UNext() {
     fi
     
     local result=$(PharseJSON "${result}" "result_status" | awk '{print $2}' | cut -d ',' -f1);
-    if [[ "$result" == "475" || "$result" == "200"]]; then
+    if [[ "${result}" == "475" || "${result}" == "200" ]]; then
         echo -n -e "\r U Next:\t\t\t\t${Font_Green}Yes${Font_Suffix}\n" && echo -e " U Next:\t\t\t\tYes" >> ${LOG_FILE};
         return;
     fi
