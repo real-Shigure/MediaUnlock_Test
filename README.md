@@ -4,7 +4,7 @@
 - 本项目以GPL V3开源，任何人均可免费使用，严禁倒卖
 - 个人频道 [@CoiaPrant_Blog](https://t.me/CoiaPrant_Blog)
 ## 使用方法
-~首先 Star本项目~
+~~首先 Star本项目~~
 
 然后 安装Curl和JQ
 已支持自动在CentOS/Ubuntu/Debian/Alpine安装JQ
@@ -34,5 +34,6 @@
 ![zfb.jpg](https://www.zeroteam.top/images/zfb.jpg)
 ![wx.png](https://www.zeroteam.top/images/wx.png)
 ~~我真是厚颜无耻啊~~
-## 关于
-就是闲得无聊整的玩意，也有很多带佬反馈，有问题也会及时更新的
+## 特别鸣谢
+- (lmc999)[https://github.com/lmc999]
+- (柠檬 LemonBench)[https://t.me/ilemonrain]
