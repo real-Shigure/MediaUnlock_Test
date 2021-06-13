@@ -24,8 +24,10 @@
 - 自动生成Ubuntu Pastebin
 
 ## BUG反馈
-[点此加群](https://t.me/zerocloud)
-[@CoiaPrant](https://t.me/CoiaPrant)
+有问题直接提ISSUE
+ - [Telegram频道](https://t.me/CoiaPrant_Blog)
+ - [Telegram群](https://t.me/vpstalking)
+ - [Telegram私聊](https://t.me/CoiaPrant)
 
 ## 赞助
 ~~我觉得没必要了吧~~
