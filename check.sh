@@ -444,7 +444,7 @@ function MediaUnlockTest_NowE() {
         return;
     fi
     
-    local result=$(PharseJSON "${result}" "responseCode" | awk '{print $2}' | cut -f2 -d'"');
+    local result=$(PharseJSON "${result}" "responseCode");
     if [[ "$result" == "SUCCESS" ]]; then
         echo -n -e "\r Now E:\t\t\t\t\t${Font_Green}Yes${Font_Suffix}\n" && echo -e " Now E:\t\t\t\t\tYes" >> ${LOG_FILE};
         return;
@@ -465,7 +465,7 @@ function MediaUnlockTest_ViuTV() {
         return;
     fi
     
-    local result=$(PharseJSON "${result}" "responseCode" | awk '{print $2}' | cut -f2 -d'"');
+    local result=$(PharseJSON "${result}" "responseCode");
     if [[ "$result" == "SUCCESS" ]]; then
         echo -n -e "\r Viu TV:\t\t\t\t${Font_Green}Yes${Font_Suffix}\n" && echo -e " Viu TV:\t\t\t\tYes" >> ${LOG_FILE};
         return
