@@ -460,7 +460,7 @@ function MediaUnlockTest_HuluJP() {
 
 function MediaUnlockTest_MyTVSuper() {
     echo -n -e " MyTVSuper:\t\t\t\t->\c";
-    local result=$(curl -sSL -${1} --max-time 30 "https://www.mytvsuper.com/iptest.php");
+    local result=`curl -sSL -${1} --max-time 30 "https://www.mytvsuper.com/iptest.php" 2>&1`;
     
     if [[ "$result" == "curl"* ]];then
         echo -n -e "\r MyTVSuper:\t\t\t\t${Font_Red}Failed (Network Connection)${Font_Suffix}\n" && echo -e " MyTVSuper:\t\t\t\tFailed (Network Connection)" >> ${LOG_FILE};
