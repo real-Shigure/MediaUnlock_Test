@@ -31,11 +31,10 @@
 
 ## 赞助
 ~~我觉得没必要了吧~~
-
 如果你想的话我也不介意
+
 ![zfb.jpg](https://www.zeroteam.top/images/zfb.jpg)
 ![wx.png](https://www.zeroteam.top/images/wx.png)
-~~我真是厚颜无耻啊~~
 ## 特别鸣谢
 - [lmc999](https://github.com/lmc999)
 - [柠檬 LemonBench](https://t.me/ilemonrain)
