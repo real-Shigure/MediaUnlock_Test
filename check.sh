@@ -393,11 +393,11 @@ function MediaUnlockTest_Dazn() {
     fi
     
     local result=$(PharseJSON "${result}" "GeolocatedCountry" | awk '{print $2}' | cut -f2 -d'"');
-    if [ -n "$result" ]; then
+    if [ -n "${result}" ]; then
         echo -n -e "\r Dazn:\t\t\t\t\t${Font_Red}Unsupport${Font_Suffix}\n" && echo -e " Dazn:\t\t\t\tUnsupport" >> ${LOG_FILE};
         return;
     fi
-    
+
     if [[ "$result" == "null" ]];then
         echo -n -e "\r Dazn:\t\t\t\t\t${Font_Red}No${Font_Suffix}\n" && echo -e " Dazn:\t\t\t\tNo" >> ${LOG_FILE}
         return;
@@ -464,8 +464,8 @@ function MediaUnlockTest_ViuTV() {
         echo -n -e "\r Viu TV:\t\t\t\t${Font_Red}Failed (Network Connection)${Font_Suffix}\n" && echo -e " Viu TV:\t\t\t\tFailed (Network Connection)" >> ${LOG_FILE};
         return;
     fi
-    
-    local result=$(Parse "${result}" "responseCode" | awk '{print $2}' | cut -f2 -d'"');
+
+    local result=$(PharseJSON "${result}" "responseCode" | awk '{print $2}' | cut -f2 -d'"');
     if [[ "$result" == "SUCCESS" ]]; then
         echo -n -e "\r Viu TV:\t\t\t\t${Font_Green}Yes${Font_Suffix}\n" && echo -e " Viu TV:\t\t\t\tYes" >> ${LOG_FILE};
         return
@@ -493,7 +493,7 @@ function MediaUnlockTest_UNext() {
         return;
     fi
     
-    if [[ "$result" == "467" ]]; then
+    if [[ "${result}" == "467" ]]; then
         echo -n -e "\r U Next:\t\t\t\t${Font_Red}No${Font_Suffix}\n" && echo -e " U Next:\t\t\t\tNo" >> ${LOG_FILE};
         return;
     fi
@@ -512,9 +512,9 @@ function MediaUnlockTest_Paravi() {
         echo -n -e "\r Paravi:\t\t\t\t${Font_Red}No${Font_Suffix}\n" && echo -e " Paravi:\t\t\t\tNo" >> ${LOG_FILE};
         return;
     fi
-    
-    PharseJSON "${result}" "playback_validity_end_at";
-    if [[ "$?" -eq 0 ]]; then
+
+    local result=$(PharseJSON "${result}" "playback_validity_end_at");
+    if [[ "${result}" != "null" ]]; then
         echo -n -e "\r Paravi:\t\t\t\t${Font_Green}Yes${Font_Suffix}\n" && echo -e " Paravi:\t\t\t\tYes" >> ${LOG_FILE};
         return;
     fi
@@ -522,9 +522,10 @@ function MediaUnlockTest_Paravi() {
 }
 
 function ISP(){
-    local ip=$(curl -s -${1} https://ip.sb)
-    local isp=$(curl -s -${1} https://api.ip.sb/geoip/${local_ipv4} | cut -f1 -d"," | cut -f4 -d '"')
-    echo -e " ** ISP: ${isp}"
+    local ip=$(curl -s -${1} "https://ip.sb");
+    local result=$(curl -s -${1} "https://api.ip.sb/geoip/${local_ipv4}");
+    local isp=$(PharseJSON "${result}" "isp");
+    echo -e " ** ISP: ${isp}" && echo -e " ** ISP: ${isp}" >> ${LOG_FILE};
 }
 
 function MediaUnlockTest() {
@@ -542,7 +543,7 @@ function MediaUnlockTest() {
     
     MediaUnlockTest_AbemaTV_IPTest ${1};
     MediaUnlockTest_Paravi ${1};
-    MediaUnlockTest_unext ${1};
+    MediaUnlockTest_UNext ${1};
     MediaUnlockTest_HuluJP ${1};
     MediaUnlockTest_PCRJP ${1};
     MediaUnlockTest_UMAJP ${1};
