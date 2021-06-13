@@ -430,9 +430,9 @@ function MediaUnlockTest_Dazn() {
         return;
     fi
     
-    local result=$(PharseJSON "${result}" "GeolocatedCountry");
-    if [ -n "${result}" ]; then
-        echo -n -e "\r Dazn:\t\t\t\t\t${Font_Red}Unsupport${Font_Suffix}\n" && echo -e " Dazn:\t\t\t\tUnsupport" >> ${LOG_FILE};
+    local result=$(PharseJSON "${result}" "Region.GeolocatedCountry");
+    if [ ! -n "${result}" ]; then
+        echo -n -e "\r Dazn:\t\t\t\t\t${Font_Red}Unsupport${Font_Suffix}\n" && echo -e " Dazn:\t\t\t\t\tUnsupport" >> ${LOG_FILE};
         return;
     fi
     
