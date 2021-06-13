@@ -429,18 +429,18 @@ function MediaUnlockTest_Dazn() {
         echo -n -e "\r Dazn:\t\t\t\t\t${Font_Red}Failed (Network Connection)${Font_Suffix}\n" && echo -e " Dazn:\t\t\t\t\tFailed (Network Connection)" >> ${LOG_FILE};
         return;
     fi
-    
-    local result=$(PharseJSON "${result}" "Region.GeolocatedCountry");
+
+    local region=`tr [:lower:] [:upper:] <<<$(PharseJSON "${result}" "Region.GeolocatedCountry")`;
     if [ ! -n "${result}" ]; then
         echo -n -e "\r Dazn:\t\t\t\t\t${Font_Red}Unsupport${Font_Suffix}\n" && echo -e " Dazn:\t\t\t\t\tUnsupport" >> ${LOG_FILE};
         return;
     fi
-    
-    if [[ "$result" == "null" ]];then
+
+    if [[ "${region}" == "null" ]];then
         echo -n -e "\r Dazn:\t\t\t\t\t${Font_Red}No${Font_Suffix}\n" && echo -e " Dazn:\t\t\t\t\tNo" >> ${LOG_FILE}
         return;
     fi
-    echo -n -e "\r Dazn:\t\t\t\t\t${Font_Green}Yes(Region: ${result})${Font_Suffix}\n" && echo -e " Dazn:\t\t\t\t\tYes(Region: ${result})" >> ${LOG_FILE}
+    echo -n -e "\r Dazn:\t\t\t\t\t${Font_Green}Yes(Region: ${region})${Font_Suffix}\n" && echo -e " Dazn:\t\t\t\t\tYes(Region: ${region})" >> ${LOG_FILE}
 }
 
 function MediaUnlockTest_HuluJP() {
