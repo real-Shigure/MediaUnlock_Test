@@ -397,7 +397,7 @@ function MediaUnlockTest_DisneyPlus() {
         return;
     fi
     
-    if [[ "${previewcheck}" != *"preview"* ]];then
+    if [[ "${previewcheck}" == *"preview"* ]];then
         echo -n -e "\r DisneyPlus:\t\t\t\t${Font_Red}No${Font_Suffix}\n" && echo -e " DisneyPlus:\t\t\t\tNo" >> ${LOG_FILE};
         return;
     fi
