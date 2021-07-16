@@ -561,10 +561,15 @@ function MediaUnlockTest_Paravi() {
 }
 
 function ISP(){
-    local result=`curl -sSL -${1} "https://api.ip.sb/geoip"  2>&1`;
-    local isp=$(PharseJSON "${result}" "isp" 2>&1);
+    local result=`curl -sSL -${1} "https://api.ip.sb/geoip" 2>&1`;
+    if [[ "$result" == "curl"* ]];then
+        return
+    fi
+    local ip=$(PharseJSON "${result}" "ip" 2>&1)
+    local isp="$(PharseJSON "${result}" "isp" 2>&1) [$(PharseJSON "${result}" "country" 2>&1) $(PharseJSON "${result}" "city" 2>&1)]";
     if [ $? -eq 0 ];then
-        echo -e " ** ISP: ${isp}" && echo -e " ** ISP: ${isp}" >> ${LOG_FILE};
+        echo " ** IP: ${ip}"
+        echo " ** ISP: ${isp}" && echo " ** ISP: ${isp}" >> ${LOG_FILE};
     fi
 }
 
