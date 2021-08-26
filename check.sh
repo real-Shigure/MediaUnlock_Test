@@ -228,7 +228,6 @@ function MediaUnlockTest_BilibiliTW() {
 }
 
 # 流媒体解锁测试-Abema.TV
-#
 function MediaUnlockTest_AbemaTV_IPTest() {
     echo -n -e " Abema.TV:\t\t\t\t->\c";
     #
@@ -252,6 +251,7 @@ function MediaUnlockTest_AbemaTV_IPTest() {
     echo -n -e "\r Abema.TV:\t\t\t\t${Font_Yellow}Oversea Only${Font_Suffix}\n" && echo -e " Abema.TV:\t\t\t\tOversea Only" >> ${LOG_FILE};
 }
 
+# 公主链接 日服
 function MediaUnlockTest_PCRJP() {
     echo -n -e " Princess Connect Re:Dive Japan:\t->\c";
     local result=`curl --user-agent "${UA_Dalvik}" -${1} -fsL --write-out %{http_code} --output /dev/null --max-time 30 https://api-priconne-redive.cygames.jp/ 2>&1`;
@@ -323,6 +323,7 @@ function MediaUnlockTest_BBC() {
     fi
 }
 
+# 流媒体解锁测试-奈飞
 function MediaUnlockTest_Netflix() {
     echo -n -e " Netflix:\t\t\t\t->\c";
     local result=`curl -${1} --user-agent "${UA_Browser}" -sSL "https://www.netflix.com/" 2>&1`;
@@ -363,6 +364,7 @@ function MediaUnlockTest_Netflix() {
     return;
 }
 
+# 流媒体解锁测试-油管
 function MediaUnlockTest_YouTube_Region() {
     echo -n -e " YouTube Region:\t\t\t->\c";
     local result=`curl --user-agent "${UA_Browser}" -${1} -sSL "https://www.youtube.com/" 2>&1`;
