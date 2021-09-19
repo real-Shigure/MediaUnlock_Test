@@ -272,21 +272,21 @@ function MediaUnlockTest_PCRJP() {
 }
 
 # 赛马娘 日服
-function MediaUnlockTest_umaJP() {
+function MediaUnlockTest_UmamusumeJP() {
     echo -n -e " Umamusume Japan:\t->\c";
     local result=`curl --user-agent "${UA_Dalvik}" -${1} -fsL --write-out %{http_code} --output /dev/null --max-time 30 https://api-umamusume.cygames.jp/ 2>&1`;
     case $result in
         000)
-            echo -n -e "\r Princess Connect Re:Dive Japan:\t${Font_Red}Failed (Network Connection)${Font_Suffix}\n" && echo -e " Princess Connect Re:Dive Japan:\tFailed (Network Connection)" >> ${LOG_FILE};
+            echo -n -e "\r  Umamusume Japan:\t${Font_Red}Failed (Network Connection)${Font_Suffix}\n" && echo -e "  Umamusume Japan:\tFailed (Network Connection)" >> ${LOG_FILE};
         ;;
         404)
-            echo -n -e "\r Princess Connect Re:Dive Japan:\t${Font_Green}Yes${Font_Suffix}\n" && echo -e " Princess Connect Re:Dive Japan:\tYes" >> ${LOG_FILE};
+            echo -n -e "\r  Umamusume Japan:\t${Font_Green}Yes${Font_Suffix}\n" && echo -e "  Umamusume Japan:\tYes" >> ${LOG_FILE};
         ;;
         403)
-            echo -n -e "\r Princess Connect Re:Dive Japan:\t${Font_Red}No${Font_Suffix}\n" && echo -e " Princess Connect Re:Dive Japan:\tNo" >> ${LOG_FILE};
+            echo -n -e "\r  Umamusume Japan:\t${Font_Red}No${Font_Suffix}\n" && echo -e "  Umamusume Japan:\tNo" >> ${LOG_FILE};
         ;;
         *)
-            echo -n -e "\r Princess Connect Re:Dive Japan:\t${Font_Red}Failed (Unexpected Result: $result)${Font_Suffix}\n" && echo -e " Princess Connect Re:Dive Japan:\tFailed (Unexpected Result: $result)" >> ${LOG_FILE};
+            echo -n -e "\r  Umamusume Japan:\t${Font_Red}Failed (Unexpected Result: $result)${Font_Suffix}\n" && echo -e "  Umamusume Japan:\tFailed (Unexpected Result: $result)" >> ${LOG_FILE};
         ;;
     esac
 }
@@ -613,7 +613,7 @@ function MediaUnlockTest() {
     MediaUnlockTest_UNext ${1};
     MediaUnlockTest_HuluJP ${1};
     MediaUnlockTest_PCRJP ${1};
-    MediaUnlockTest_umaJP ${1};
+    MediaUnlockTest_UmamusumeJP ${1};
     MediaUnlockTest_UMAJP ${1};
     MediaUnlockTest_Kancolle ${1};
     
